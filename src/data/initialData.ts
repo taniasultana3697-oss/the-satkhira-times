@@ -507,8 +507,21 @@ export const INITIAL_ADS: AdConfiguration[] = [
     name: 'Adsterra Popunder Ads',
     enabled: true,
     bannerType: 'script',
-    codeSnippet: `<script src="https://pl31125455.profitableratecpmnetwork.com/d5/dd/ec/d5ddec2a1a03f6d7d8e6be14f9a193e5.js"></script>`,
-    note: 'Adsterra পপআন্ডার স্ক্রিপ্ট (ব্যবহারকারীর ক্লিকে স্বয়ংক্রিয়ভাবে সক্রিয়)।'
+    targetUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    codeSnippet: `<script type="text/javascript" src="https://pl31125455.profitableratecpmnetwork.com/d5/dd/ec/d5ddec2a1a03f6d7d8e6be14f9a193e5.js"></script>`,
+    note: 'Adsterra পপআন্ডার স্ক্রিপ্ট (ব্যবহারকারীর ক্লিকে ব্যাকগ্রাউন্ডে স্বয়ংক্রিয়ভাবে সক্রিয়)।'
+  },
+  {
+    id: 'ad-popup',
+    slot: 'popup',
+    name: 'পপ-আপ বিজ্ঞাপন উইন্ডো (Pop-up Modal Banner)',
+    enabled: true,
+    bannerType: 'image',
+    dimensions: '600x400',
+    bannerImageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1000&auto=format&fit=crop&q=80',
+    targetUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    codeSnippet: `<div style="text-align:center;"><a href="https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2" target="_blank"><img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1000&auto=format&fit=crop&q=80" style="max-width:100%; border-radius:12px;" /></a></div>`,
+    note: 'সাইটে প্রবেশের ২-৩ সেকেন্ড পর ভাসমান পপ-আপ অ্যাড উইন্ডো (ক্রস দিয়ে বন্ধ ও অফার দেখার ব্যবস্থা)।'
   },
   {
     id: 'ad-socialbar',

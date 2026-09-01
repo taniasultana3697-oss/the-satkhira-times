@@ -15,6 +15,7 @@ import { StaticPages } from './components/pages/StaticPages';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdBanner } from './components/ads/AdBanner';
 import { AdsterraGlobalScripts } from './components/ads/AdsterraGlobalScripts';
+import { PopupAdModal } from './components/ads/PopupAdModal';
 
 const MainPortalContent: React.FC = () => {
   const { currentView } = useNews();
@@ -23,6 +24,9 @@ const MainPortalContent: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 selection:bg-red-600 selection:text-white">
       {/* Global Adsterra Background Scripts (Popunder & Socialbar) */}
       <AdsterraGlobalScripts />
+
+      {/* Pop-up Ad Modal (Welcome / Sponsored Pop-up Window) */}
+      <PopupAdModal />
 
       {/* Top Main Navigation */}
       <Header />

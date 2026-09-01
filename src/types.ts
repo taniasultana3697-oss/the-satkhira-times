@@ -68,7 +68,7 @@ export interface BreakingNewsItem {
 
 export interface AdConfiguration {
   id: string;
-  slot: 'header_banner' | 'sidebar_banner' | 'in_article' | 'footer_banner' | 'popunder' | 'direct_link' | 'socialbar' | 'native_banner';
+  slot: 'header_banner' | 'sidebar_banner' | 'in_article' | 'footer_banner' | 'popunder' | 'popup' | 'direct_link' | 'socialbar' | 'native_banner';
   name: string;
   enabled: boolean;
   codeSnippet: string;

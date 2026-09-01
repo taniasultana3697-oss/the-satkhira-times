@@ -139,13 +139,12 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (saved) {
       try {
         const parsed: AdConfiguration[] = JSON.parse(saved);
-        // Check if existing saved ads are old dummy placeholders
-        const hasAdsterraKey = parsed.some(a => a.codeSnippet?.includes('6899df43cee03e4cbbb606088858f40c') || a.codeSnippet?.includes('pl31125455'));
-        if (!hasAdsterraKey) {
-          localStorage.setItem('satkhira_news_ads', JSON.stringify(INITIAL_ADS));
-          return INITIAL_ADS;
-        }
-        return parsed;
+        // Merge with initial ads to guarantee all slots (like popup, native_banner, popunder) exist
+        const mergedAds = INITIAL_ADS.map(initAd => {
+          const found = parsed.find(p => p.id === initAd.id || p.slot === initAd.slot);
+          return found ? { ...initAd, ...found } : initAd;
+        });
+        return mergedAds;
       } catch {
         return INITIAL_ADS;
       }

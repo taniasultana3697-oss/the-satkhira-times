@@ -13,6 +13,7 @@ import {
   FolderOpen
 } from 'lucide-react';
 import { SATKHIRA_UPAZILAS, INITIAL_CATEGORIES } from '../../data/initialData';
+import { AdBanner } from '../ads/AdBanner';
 
 export const CategoryArchiveView: React.FC = () => {
   const { 
@@ -314,6 +315,9 @@ export const CategoryArchiveView: React.FC = () => {
           ))}
         </div>
       )}
+
+      {/* Sponsored Native Banner */}
+      <AdBanner slot="native_banner" className="mt-8" />
 
     </div>
   );
