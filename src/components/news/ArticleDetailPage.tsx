@@ -48,6 +48,7 @@ export const ArticleDetailPage: React.FC = () => {
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedPostText, setCopiedPostText] = useState(false);
   const [commentName, setCommentName] = useState('');
   const [commentEmail, setCommentEmail] = useState('');
   const [commentBody, setCommentBody] = useState('');
@@ -65,8 +66,10 @@ export const ArticleDetailPage: React.FC = () => {
   if (!article) return null;
 
   const readTime = calculateReadTime(article.content);
-  const articleUrl = window.location.href;
-  const shareLinks = getShareLinks(articleUrl, article.title);
+  const articleUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}${window.location.pathname}?article=${article.id}`
+    : `https://satkhiratimes.com/?article=${article.id}`;
+  const shareLinks = getShareLinks(articleUrl, article.title, article.featuredImage);
 
   // Related articles in same category
   const relatedArticles = articles
@@ -105,6 +108,36 @@ export const ArticleDetailPage: React.FC = () => {
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2500);
   };
+
+  const handleFacebookShare = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`;
+    window.open(fbUrl, 'fbShareWindow', 'width=650,height=550,top=100,left=100,toolbar=no,status=no,resizable=yes');
+  };
+
+  const handleNativeShare = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: article.title,
+          text: `${article.title}\n\n${article.excerpt}`,
+          url: articleUrl,
+        });
+      } catch (err) {
+        // Ignored or cancelled
+      }
+    } else {
+      handleFacebookShare();
+    }
+  };
+
+  const handleCopyFormattedPost = () => {
+    const text = `📌 ${article.title}\n\n${article.excerpt}\n\n🔗 সম্পূর্ণ প্রতিবেদনটি পড়তে ক্লিক করুন:\n${articleUrl}\n\n#TheSatkhiraTimes #SatkhiraNews #${article.category.replace(/\s+/g, '')}`;
+    navigator.clipboard.writeText(text);
+    setCopiedPostText(true);
+    setTimeout(() => setCopiedPostText(false), 2500);
+  };
+
 
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -236,15 +269,22 @@ export const ArticleDetailPage: React.FC = () => {
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-semibold text-gray-500 mr-1 hidden sm:inline font-bangla">শেয়ার:</span>
             
-            <a 
-              href={shareLinks.facebook} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="p-1.5 bg-[#1877F2] text-white rounded hover:opacity-90 transition"
-              title="ফেসবুকে শেয়ার করুন"
+            <button 
+              onClick={handleFacebookShare}
+              className="px-2.5 py-1.5 bg-[#1877F2] text-white rounded hover:opacity-90 transition flex items-center gap-1.5 text-xs font-bold font-bangla shadow-sm"
+              title="ফেসবুকে ছবি সহ শেয়ার করুন"
             >
-              <Facebook className="w-4 h-4" />
-            </a>
+              <Facebook className="w-3.5 h-3.5" />
+              <span>ফেসবুক</span>
+            </button>
+
+            <button 
+              onClick={handleNativeShare}
+              className="p-1.5 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition"
+              title="ডিভাইস শেয়ার (ফেসবুক/হোয়াটসঅ্যাপ অ্যাপ)"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
 
             <a 
               href={shareLinks.whatsapp} 
@@ -284,6 +324,7 @@ export const ArticleDetailPage: React.FC = () => {
               {copiedLink ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
             </button>
           </div>
+
 
           {/* Bookmark and Print */}
           <div className="flex items-center gap-2">
@@ -383,37 +424,110 @@ export const ArticleDetailPage: React.FC = () => {
       )}
 
       {/* Bottom Share Bar */}
-      <div className="my-8 p-4 bg-slate-900 text-white rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print shadow-lg">
+      <div className="my-8 p-5 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 no-print shadow-xl border border-slate-700/50">
         <div>
-          <h4 className="font-bold text-sm font-serif-bangla">সংবাদটি ভালো লাগলে বন্ধুদের সাথে শেয়ার করুন</h4>
-          <p className="text-xs text-slate-400">সত্য ও বস্তুনিষ্ঠ তথ্য প্রচারে আমাদের পাশে থাকুন</p>
+          <h4 className="font-bold text-base font-serif-bangla flex items-center gap-2">
+            <Share2 className="w-4 h-4 text-red-500" />
+            ফেসবুকে সরাসরি শেয়ার করুন
+          </h4>
+          <p className="text-xs text-slate-300 mt-0.5">পোস্টের মূল ছবি ও শিরোনাম সহ ফেসবুকে শেয়ার হবে</p>
         </div>
-        <div className="flex items-center gap-2">
-          <a href={shareLinks.facebook} target="_blank" rel="noopener noreferrer" className="bg-[#1877F2] text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 hover:opacity-90">
-            <Facebook className="w-3.5 h-3.5" /> ফেসবুক
-          </a>
-          <a href={shareLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="bg-[#25D366] text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 hover:opacity-90">
-            <Phone className="w-3.5 h-3.5" /> হোয়াটসঅ্যাপ
-          </a>
-          <button onClick={handleCopyLink} className="bg-slate-800 border border-slate-700 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 hover:bg-slate-700">
-            <Copy className="w-3.5 h-3.5" /> লিঙ্ক
+        <div className="flex flex-wrap items-center gap-2">
+          <button 
+            onClick={handleFacebookShare}
+            className="bg-[#1877F2] hover:bg-[#166fe5] text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition shadow-md font-bangla active:scale-95"
+          >
+            <Facebook className="w-4 h-4" /> ফেসবুকে শেয়ার
+          </button>
+          
+          <button 
+            onClick={handleNativeShare}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition font-bangla shadow-md"
+          >
+            <Share2 className="w-4 h-4" /> ডিভাইস শেয়ার
+          </button>
+
+          <button 
+            onClick={handleCopyFormattedPost}
+            className="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition font-bangla"
+            title="ফেসবুকে পোস্ট করার ফরম্যাট করা টেক্সট ও লিঙ্ক কপি"
+          >
+            {copiedPostText ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+            <span>{copiedPostText ? 'টেক্সট কপি হয়েছে!' : 'পোস্ট টেক্সট কপি'}</span>
+          </button>
+
+          <button 
+            onClick={handleCopyLink} 
+            className="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition font-bangla"
+            title="শুধু লিঙ্ক কপি"
+          >
+            <Copy className="w-3.5 h-3.5" /> {copiedLink ? 'লিঙ্ক কপি হয়েছে' : 'লিঙ্ক'}
           </button>
         </div>
       </div>
 
-      {/* Facebook & OpenGraph Metadata Inspector Simulation Box */}
-      <div className="my-6 p-4 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-300 dark:border-slate-700 no-print">
-        <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2 mb-2">
-          <Share2 className="w-4 h-4 text-blue-600" />
-          সোশ্যাল মিডিয়া প্রিভিউ ও এসইও মেটাডাটা (Facebook & Google OpenGraph Ready)
-        </h4>
-        <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1 text-slate-600 dark:text-slate-300">
-          <div><strong>og:title:</strong> {article.title}</div>
-          <div><strong>og:description:</strong> {article.excerpt}</div>
-          <div><strong>og:image:</strong> <span className="text-blue-600 truncate inline-block max-w-[300px]">{article.featuredImage}</span></div>
-          <div><strong>og:site_name:</strong> THE SATKHIRA TIMES</div>
+      {/* Facebook Link Preview Card Simulation (Exact Facebook Feed Look) */}
+      <div className="my-6 p-4 sm:p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm no-print">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 font-serif-bangla">
+              <Facebook className="w-4 h-4 text-[#1877F2]" />
+              ফেসবুক শেয়ার প্রিভিউ (Open Graph Live Preview)
+            </h4>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              ফেসবুকে লিঙ্কটি পেস্ট বা শেয়ার করলে নিচের কার্ডের মতো ছবি ও শিরোনাম প্রদর্শিত হবে:
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleFacebookShare}
+              className="text-xs px-3 py-1.5 bg-[#1877F2] text-white font-bold rounded-lg hover:bg-blue-700 transition flex items-center gap-1.5"
+            >
+              <Facebook className="w-3.5 h-3.5" /> শেয়ার টেস্ট
+            </button>
+            <a
+              href={shareLinks.facebookDebugger}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] text-blue-600 hover:underline flex items-center gap-1 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1.5 rounded-lg"
+              title="Facebook Sharing Debugger টুল দিয়ে ছবি রিফ্রেশ ও মেটাডাটা চেক করুন"
+            >
+              FB Debugger ↗
+            </a>
+          </div>
+        </div>
+
+        {/* Realistic Facebook Post Card Mockup */}
+        <div className="max-w-xl mx-auto rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 shadow-sm transition hover:shadow-md cursor-pointer" onClick={handleFacebookShare}>
+          {/* Post Image */}
+          <div className="relative aspect-[1.91/1] w-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+            <img 
+              src={article.featuredImage} 
+              alt={article.title}
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm text-white text-[10px] font-sans px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+              {article.category}
+            </div>
+          </div>
+
+          {/* Facebook Post Info */}
+          <div className="p-3.5 bg-[#f0f2f5] dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-sans">
+              SATKHIRATIMES.COM
+            </div>
+            <h5 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base leading-snug mt-1 font-serif-bangla line-clamp-2">
+              {article.title}
+            </h5>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed font-bangla">
+              {article.excerpt}
+            </p>
+          </div>
         </div>
       </div>
+
 
       {/* COMMENTS SECTION */}
       <section className="my-10 no-print">

@@ -20,6 +20,8 @@ import {
   INITIAL_PHOTO_STORIES, 
   INITIAL_VIDEO_NEWS 
 } from '../data/initialData';
+import { updateArticleMetaTags, resetHomeMetaTags } from '../utils/seo';
+
 
 interface NewsContextType {
   // Articles
@@ -244,11 +246,100 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : ['art-1', 'art-3'];
   });
 
-  // Router State
-  const [currentView, setCurrentView] = useState<'home' | 'article' | 'category' | 'search' | 'admin' | 'about' | 'contact' | 'privacy' | 'terms' | 'bookmarks'>('home');
-  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // Router State initialized from URL query params
+  const [currentView, setCurrentView] = useState<'home' | 'article' | 'category' | 'search' | 'admin' | 'about' | 'contact' | 'privacy' | 'terms' | 'bookmarks'>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('article') || params.get('id')) return 'article';
+      if (params.get('category')) return 'category';
+      if (params.get('view')) return (params.get('view') as any) || 'home';
+    }
+    return 'home';
+  });
+
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('article') || params.get('id') || null;
+    }
+    return null;
+  });
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('category') || null;
+    }
+    return null;
+  });
+
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Sync URL search params and OpenGraph tags dynamically
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const url = new URL(window.location.href);
+
+    if (currentView === 'article' && selectedArticleId) {
+      const currentArt = articles.find(a => a.id === selectedArticleId);
+      if (currentArt) {
+        updateArticleMetaTags(currentArt);
+      }
+      url.searchParams.set('article', selectedArticleId);
+      url.searchParams.delete('category');
+      url.searchParams.delete('view');
+      window.history.replaceState({ view: 'article', id: selectedArticleId }, '', url.toString());
+    } else if (currentView === 'category' && selectedCategory) {
+      resetHomeMetaTags();
+      url.searchParams.set('category', selectedCategory);
+      url.searchParams.delete('article');
+      url.searchParams.delete('id');
+      url.searchParams.delete('view');
+      window.history.replaceState({ view: 'category', category: selectedCategory }, '', url.toString());
+    } else if (currentView === 'home') {
+      resetHomeMetaTags();
+      url.searchParams.delete('article');
+      url.searchParams.delete('id');
+      url.searchParams.delete('category');
+      url.searchParams.delete('view');
+      window.history.replaceState({ view: 'home' }, '', url.pathname);
+    } else {
+      resetHomeMetaTags();
+      url.searchParams.set('view', currentView);
+      url.searchParams.delete('article');
+      url.searchParams.delete('id');
+      url.searchParams.delete('category');
+      window.history.replaceState({ view: currentView }, '', url.toString());
+    }
+  }, [currentView, selectedArticleId, selectedCategory, articles]);
+
+  // Handle Browser Back / Forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const articleParam = params.get('article') || params.get('id');
+      const catParam = params.get('category');
+      const viewParam = params.get('view') as any;
+
+      if (articleParam) {
+        setSelectedArticleId(articleParam);
+        setCurrentView('article');
+      } else if (catParam) {
+        setSelectedCategory(catParam);
+        setCurrentView('category');
+      } else if (viewParam) {
+        setCurrentView(viewParam);
+      } else {
+        setCurrentView('home');
+        setSelectedArticleId(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
 
   // UI Theme & Reading
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {

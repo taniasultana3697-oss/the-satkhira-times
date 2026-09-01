@@ -108,7 +108,7 @@ export const calculateReadTime = (content: string): string => {
 };
 
 // Social Share Link Builders
-export const getShareLinks = (url: string, title: string) => {
+export const getShareLinks = (url: string, title: string, imageUrl?: string) => {
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
@@ -117,7 +117,9 @@ export const getShareLinks = (url: string, title: string) => {
     twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
     whatsapp: `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`,
     telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`,
-    messenger: `fb-messenger://share/?link=${encodedUrl}&app_id=123456789`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
+    messenger: `https://www.facebook.com/dialog/send?link=${encodedUrl}&app_id=291494419107518&redirect_uri=${encodedUrl}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+    facebookDebugger: `https://developers.facebook.com/tools/debug/?q=${encodedUrl}`
   };
 };
+
