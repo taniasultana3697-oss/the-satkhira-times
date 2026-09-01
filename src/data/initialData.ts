@@ -419,69 +419,106 @@ export const INITIAL_ADS: AdConfiguration[] = [
   {
     id: 'ad-header',
     slot: 'header_banner',
-    name: 'টপ হেডার ব্যানার (728x90 / Responsive)',
+    name: 'টপ হেডার ব্যানার (728x90 Banner)',
     enabled: true,
-    bannerType: 'image',
+    bannerType: 'script',
     dimensions: '728x90',
     bannerImageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&auto=format&fit=crop&q=80',
-    targetUrl: 'https://satkhiratimes.com/advertise',
-    codeSnippet: '<!-- Adsterra 728x90 Header Banner Slot -->\n<script type="text/javascript">\n  atOptions = { "key" : "adsterra_header_728x90_satkhira", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };\n</script>',
-    note: 'Adsterra হেডার বিজ্ঞাপন ব্যানার কোড। অ্যাডমিন থেকে পরিবর্তনযোগ্য।'
+    targetUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    codeSnippet: `<script type="text/javascript">
+  atOptions = {
+    'key' : '6899df43cee03e4cbbb606088858f40c',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script type="text/javascript" src="https://www.highrevenueformat.com/6899df43cee03e4cbbb606088858f40c/invoke.js"></script>`,
+    note: 'Adsterra 728x90 হেডার ব্যানার বিজ্ঞাপন (কী: 6899df43cee03e4cbbb606088858f40c)।'
   },
   {
     id: 'ad-sidebar',
     slot: 'sidebar_banner',
-    name: 'সাইডবার ব্যানার বিজ্ঞাপন (300x250)',
+    name: 'সাইডবার ব্যানার বিজ্ঞাপন (300x250 Banner)',
     enabled: true,
-    bannerType: 'image',
+    bannerType: 'script',
     dimensions: '300x250',
     bannerImageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600&auto=format&fit=crop&q=80',
-    targetUrl: 'https://satkhiratimes.com/contact',
-    codeSnippet: '<!-- Adsterra 300x250 Sidebar Slot -->\n<script type="text/javascript">\n  atOptions = { "key" : "adsterra_sidebar_300x250_satkhira", "format" : "iframe", "height" : 250, "width" : 300, "params" : {} };\n</script>',
-    note: 'সাইডবার ও ট্রেন্ডিং নিউজের পাশে দেখাবে।'
+    targetUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    codeSnippet: `<script type="text/javascript">
+  atOptions = {
+    'key' : '1b7a4aa64f6c8149c78e46f70b159fc8',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script type="text/javascript" src="https://www.highrevenueformat.com/1b7a4aa64f6c8149c78e46f70b159fc8/invoke.js"></script>`,
+    note: 'Adsterra 300x250 সাইডবার বিজ্ঞাপন (কী: 1b7a4aa64f6c8149c78e46f70b159fc8)।'
   },
   {
     id: 'ad-in-article',
     slot: 'in_article',
-    name: 'নিউজ আর্টিকেলের ভেতরে ব্যানার (Native Banner)',
+    name: 'নেটিভ ব্যানার বিজ্ঞাপন (Native Banner)',
     enabled: true,
-    bannerType: 'image',
-    dimensions: '690x100',
+    bannerType: 'script',
+    dimensions: 'Native',
     bannerImageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000&auto=format&fit=crop&q=80',
-    targetUrl: 'https://satkhiratimes.com/advertise',
-    codeSnippet: '<!-- Adsterra In-Article Native Banner -->\n<script async="async" data-cfasync="false" src="//pl.adsterra.com/in-article-banner.js"></script>',
-    note: 'প্রতিটি সংবাদের ভেতরে ৩য় অনুচ্ছেদের পর স্বয়ংক্রিয়ভাবে উপস্থাপিত হয়।'
+    targetUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    codeSnippet: `<script async="async" data-cfasync="false" src="https://pl31125550.profitableratecpmnetwork.com/9d9df04b79418e31830e5386e0057871/invoke.js"></script>
+<div id="container-9d9df04b79418e31830e5386e0057871"></div>`,
+    note: 'Adsterra নেটিভ ব্যানার বিজ্ঞাপন (সংবাদের ভেতরে ও হোমপেজে স্বয়ংক্রিয়ভাবে উপস্থাপিত)।'
   },
   {
     id: 'ad-footer',
     slot: 'footer_banner',
     name: 'স্টিকি ফুটার ব্যানার (Sticky Footer 728x90)',
     enabled: true,
-    bannerType: 'image',
+    bannerType: 'script',
     dimensions: '728x90',
     bannerImageUrl: 'https://images.unsplash.com/photo-1508873696983-2df570464756?w=1200&auto=format&fit=crop&q=80',
-    targetUrl: 'https://satkhiratimes.com/e-paper',
-    codeSnippet: '<!-- Adsterra Sticky Bottom Bar Slot -->',
-    note: 'স্ক্রিনের নিচে ভাসমান স্টিকি ব্যানার (ক্লোজ বাটন সহ)।'
+    targetUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    codeSnippet: `<script type="text/javascript">
+  atOptions = {
+    'key' : '6899df43cee03e4cbbb606088858f40c',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script type="text/javascript" src="https://www.highrevenueformat.com/6899df43cee03e4cbbb606088858f40c/invoke.js"></script>`,
+    note: 'স্ক্রিনের নিচে ভাসমান Adsterra স্টিকি ব্যানার 728x90।'
   },
   {
     id: 'ad-popunder',
     slot: 'popunder',
-    name: 'Adsterra Popunder Script',
-    enabled: false,
+    name: 'Adsterra Popunder Ads',
+    enabled: true,
     bannerType: 'script',
-    codeSnippet: '<!-- Adsterra Popunder Code -->\n<script type="text/javascript" src="//pl.adsterra.com/popunder_satkhira.js"></script>',
-    note: 'সাইটে প্রথম ক্লিকে নতুন ট্যাবে স্পন্সরড পেজ ওপেন করবে (টগল অন/অফ করা যায়)।'
+    codeSnippet: `<script src="https://pl31125455.profitableratecpmnetwork.com/d5/dd/ec/d5ddec2a1a03f6d7d8e6be14f9a193e5.js"></script>`,
+    note: 'Adsterra পপআন্ডার স্ক্রিপ্ট (ব্যবহারকারীর ক্লিকে স্বয়ংক্রিয়ভাবে সক্রিয়)।'
+  },
+  {
+    id: 'ad-socialbar',
+    slot: 'socialbar',
+    name: 'Adsterra Social Bar Ads',
+    enabled: true,
+    bannerType: 'script',
+    codeSnippet: `<script src="https://pl31125456.profitableratecpmnetwork.com/9b/98/69/9b986949090d2888ce3569ade4c3f2b2.js"></script>`,
+    note: 'Adsterra সোশ্যাল বার নোটিফিকেশন ও ইন্টারেক্টিভ বিজ্ঞাপন স্ক্রিপ্ট।'
   },
   {
     id: 'ad-direct-link',
     slot: 'direct_link',
-    name: 'Adsterra Direct Smart Link',
-    enabled: false,
+    name: 'Adsterra Direct Link (High CPM)',
+    enabled: true,
     bannerType: 'direct_link',
-    targetUrl: 'https://www.highcpmgate.com/direct-link-satkhira',
-    codeSnippet: 'https://www.highcpmgate.com/direct-link-satkhira',
-    note: 'ডাইরেক্ট ট্রাফিক ও উচ্চ CPM স্মার্ট লিঙ্ক।'
+    targetUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    codeSnippet: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
+    note: 'Adsterra ডাইরেক্ট স্মার্ট আর্নিং লিঙ্ক।'
   }
 ];
 

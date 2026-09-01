@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NewsProvider, useNews } from './context/NewsContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -14,30 +14,16 @@ import { BookmarksView } from './components/news/BookmarksView';
 import { StaticPages } from './components/pages/StaticPages';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdBanner } from './components/ads/AdBanner';
+import { AdsterraGlobalScripts } from './components/ads/AdsterraGlobalScripts';
 
 const MainPortalContent: React.FC = () => {
-  const { currentView, adConfigs } = useNews();
-
-  // Trigger Popunder Ad if enabled once on initial user interaction
-  useEffect(() => {
-    const popunderConfig = adConfigs.find(a => a.slot === 'popunder' && a.enabled);
-    if (popunderConfig && popunderConfig.targetUrl) {
-      let triggered = false;
-      const handleUserFirstClick = () => {
-        if (!triggered) {
-          triggered = true;
-          // Clean non-intrusive popunder handler
-          // window.open(popunderConfig.targetUrl, '_blank');
-        }
-      };
-      window.addEventListener('click', handleUserFirstClick, { once: true });
-      return () => window.removeEventListener('click', handleUserFirstClick);
-    }
-  }, [adConfigs]);
+  const { currentView } = useNews();
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 selection:bg-red-600 selection:text-white">
-      
+      {/* Global Adsterra Background Scripts (Popunder & Socialbar) */}
+      <AdsterraGlobalScripts />
+
       {/* Top Main Navigation */}
       <Header />
 
@@ -54,13 +40,18 @@ const MainPortalContent: React.FC = () => {
             {/* Special Local Satkhira Hub (7 Upazilas) */}
             <SatkhiraSpecialSection />
 
-            {/* In-Between Content Ad Banner */}
+            {/* Adsterra Native Banner between sections */}
             <div className="max-w-7xl mx-auto px-4 my-4">
               <AdBanner slot="in_article" />
             </div>
 
             {/* Category News Grids */}
             <CategoryGridSection />
+
+            {/* Adsterra Direct Link Smart Offer Card */}
+            <div className="max-w-7xl mx-auto px-4 my-2">
+              <AdBanner slot="direct_link" />
+            </div>
 
             {/* Photo & Video Multimedia Gallery */}
             <MediaGallerySection />
@@ -83,7 +74,7 @@ const MainPortalContent: React.FC = () => {
         )}
       </main>
 
-      {/* Newspaper Footer */}
+      {/* Newspaper Footer with Sticky 728x90 Adsterra Banner */}
       <Footer />
 
     </div>

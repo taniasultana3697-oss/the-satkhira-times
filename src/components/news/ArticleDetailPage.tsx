@@ -502,6 +502,11 @@ export const ArticleDetailPage: React.FC = () => {
         </div>
       </section>
 
+      {/* Adsterra Smart Direct Link Offer */}
+      <div className="my-6 no-print">
+        <AdBanner slot="direct_link" />
+      </div>
+
       {/* RELATED NEWS (সম্পর্কিত খবর) */}
       {relatedArticles.length > 0 && (
         <section className="my-10 pt-6 border-t-2 border-slate-200 dark:border-slate-800 no-print">

@@ -582,6 +582,13 @@ export const Header: React.FC = () => {
           </div>
         )}
       </nav>
+
+      {/* Top 728x90 Header Adsterra Banner */}
+      {currentView !== 'admin' && (
+        <div className="bg-transparent py-2">
+          <AdBanner slot="header_banner" />
+        </div>
+      )}
     </header>
   );
 };

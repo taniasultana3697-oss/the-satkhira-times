@@ -134,7 +134,21 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Ads
   const [adConfigs, setAdConfigs] = useState<AdConfiguration[]>(() => {
     const saved = localStorage.getItem('satkhira_news_ads');
-    return saved ? JSON.parse(saved) : INITIAL_ADS;
+    if (saved) {
+      try {
+        const parsed: AdConfiguration[] = JSON.parse(saved);
+        // Check if existing saved ads are old dummy placeholders
+        const hasAdsterraKey = parsed.some(a => a.codeSnippet?.includes('6899df43cee03e4cbbb606088858f40c') || a.codeSnippet?.includes('pl31125455'));
+        if (!hasAdsterraKey) {
+          localStorage.setItem('satkhira_news_ads', JSON.stringify(INITIAL_ADS));
+          return INITIAL_ADS;
+        }
+        return parsed;
+      } catch {
+        return INITIAL_ADS;
+      }
+    }
+    return INITIAL_ADS;
   });
 
   // Settings

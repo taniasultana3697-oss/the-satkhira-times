@@ -2,6 +2,7 @@ import React from 'react';
 import { useNews } from '../../context/NewsContext';
 import { getRelativeBengaliTime, toBengaliDigits } from '../../utils/helpers';
 import { Flame, Clock, Eye, Bookmark, Share2, MapPin, ChevronRight, TrendingUp } from 'lucide-react';
+import { AdBanner } from '../ads/AdBanner';
 
 export const HeadlineHero: React.FC = () => {
   const { 
@@ -223,6 +224,11 @@ export const HeadlineHero: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Adsterra 300x250 Sidebar Banner */}
+          <div className="mt-4">
+            <AdBanner slot="sidebar_banner" />
           </div>
 
           {/* Quick Newsletter Signup Box inside Side Column */}
