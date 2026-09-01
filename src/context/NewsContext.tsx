@@ -252,11 +252,13 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : ['art-1', 'art-3'];
   });
 
-  // Router State initialized from URL query params
+  // Router State initialized from URL query params or pathnames (/news/:id)
   const [currentView, setCurrentView] = useState<'home' | 'article' | 'category' | 'search' | 'admin' | 'about' | 'contact' | 'privacy' | 'terms' | 'bookmarks'>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       if (params.get('article') || params.get('id')) return 'article';
+      const pathMatch = window.location.pathname.match(/^\/(?:news|article)\/([^/?]+)/);
+      if (pathMatch && pathMatch[1]) return 'article';
       if (params.get('category')) return 'category';
       if (params.get('view')) return (params.get('view') as any) || 'home';
     }
@@ -266,7 +268,11 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      return params.get('article') || params.get('id') || null;
+      if (params.get('article') || params.get('id')) {
+        return params.get('article') || params.get('id');
+      }
+      const pathMatch = window.location.pathname.match(/^\/(?:news|article)\/([^/?]+)/);
+      if (pathMatch && pathMatch[1]) return pathMatch[1];
     }
     return null;
   });
