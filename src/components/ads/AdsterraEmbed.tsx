@@ -140,9 +140,47 @@ export const AdsterraEmbed: React.FC<AdsterraEmbedProps> = ({
   }
 
   if (type === 'native') {
+    const containerId = 'container-9d9df04b79418e31830e5386e0057871';
+    const iframeHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <base target="_blank">
+          <style>
+            * { box-sizing: border-box; }
+            body { 
+              margin: 0; 
+              padding: 4px; 
+              display: flex; 
+              justify-content: center; 
+              align-items: center; 
+              background: transparent; 
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            }
+            #${containerId} {
+              width: 100%;
+              min-height: 140px;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="${containerId}"></div>
+          <script async="async" data-cfasync="false" src="https://pl31125550.profitableratecpmnetwork.com/9d9df04b79418e31830e5386e0057871/invoke.js"></script>
+        </body>
+      </html>
+    `;
+
     return (
       <div className={`w-full flex justify-center ${className}`}>
-        <div ref={nativeRef} className="w-full min-h-[120px] overflow-hidden" />
+        <div className="w-full min-h-[160px] bg-slate-50 dark:bg-slate-900/60 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 p-1">
+          <iframe
+            title="Adsterra Native Ad Banner"
+            srcDoc={iframeHtml}
+            className="w-full min-h-[160px] border-0"
+            scrolling="no"
+          />
+        </div>
       </div>
     );
   }

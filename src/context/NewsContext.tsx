@@ -154,7 +154,19 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Settings
   const [settings, setSettings] = useState<WebsiteSettings>(() => {
     const saved = localStorage.getItem('satkhira_news_settings');
-    return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+    if (saved) {
+      try {
+        const parsed: WebsiteSettings = JSON.parse(saved);
+        if (parsed.telegramUrl === 'https://t.me/SatkhiraTimesOfficial' || !parsed.telegramUrl) {
+          parsed.telegramUrl = INITIAL_SETTINGS.telegramUrl;
+          localStorage.setItem('satkhira_news_settings', JSON.stringify(parsed));
+        }
+        return parsed;
+      } catch {
+        return INITIAL_SETTINGS;
+      }
+    }
+    return INITIAL_SETTINGS;
   });
 
   // Poll

@@ -241,20 +241,22 @@ export const HeadlineHero: React.FC = () => {
             </p>
             <div className="mt-2.5 flex justify-center gap-2">
               <a 
-                href="https://t.me/SatkhiraTimesOfficial" 
+                href="https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-[#229ED9] hover:opacity-90 text-white text-xs font-bold px-3 py-1 rounded transition shadow-sm font-sans"
+                className="bg-[#229ED9] hover:opacity-90 text-white text-xs font-bold px-3 py-1 rounded transition shadow-sm font-sans flex items-center gap-1"
+                title="টেলিগ্রাম চ্যানেলে জয়েন করুন"
               >
-                টেলিগ্রাম
+                <span>টেলিগ্রাম</span>
               </a>
               <a 
-                href="https://whatsapp.com" 
+                href="https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-[#25D366] hover:opacity-90 text-white text-xs font-bold px-3 py-1 rounded transition shadow-sm font-sans"
+                className="bg-[#25D366] hover:opacity-90 text-white text-xs font-bold px-3 py-1 rounded transition shadow-sm font-sans flex items-center gap-1"
+                title="হোয়াটসঅ্যাপ চ্যানেলে যুক্ত হোন"
               >
-                হোয়াটসঅ্যাপ
+                <span>হোয়াটসঅ্যাপ</span>
               </a>
             </div>
           </div>

@@ -145,6 +145,27 @@ export const StaticPages: React.FC<StaticPageProps> = ({ page }) => {
                     <span className="text-slate-600 dark:text-slate-400 text-xs">{settings.contactEmail}</span>
                   </div>
                 </div>
+
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row gap-2">
+                  <a
+                    href="https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2 px-3 bg-[#229ED9] hover:opacity-90 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-2 transition"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>টেলিগ্রাম চ্যানেল</span>
+                  </a>
+                  <a
+                    href="https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2 px-3 bg-[#25D366] hover:opacity-90 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-2 transition"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span>হোয়াটসঅ্যাপ বার্তা</span>
+                  </a>
+                </div>
               </div>
             </div>
 

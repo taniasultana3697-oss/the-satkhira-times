@@ -143,16 +143,28 @@ export const Footer: React.FC = () => {
 
             {/* Social Links */}
             <div className="pt-2 flex items-center gap-2">
-              <a href={settings.facebookUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#8B0000] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800">
+              <a href={settings.facebookUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#8B0000] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800" title="ফেসবুক পেজ">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href={settings.twitterUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#8B0000] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800">
+              <a href={settings.twitterUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#8B0000] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800" title="এক্স (টুইটার)">
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href={settings.telegramUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#8B0000] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800">
+              <a 
+                href={settings.telegramUrl || 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2'} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#229ED9] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800"
+                title="টেলিগ্রাম চ্যানেল"
+              >
                 <Send className="w-4 h-4" />
               </a>
-              <a href={`https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#8B0000] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800">
+              <a 
+                href="https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-8 h-8 rounded bg-zinc-900 hover:bg-[#25D366] text-zinc-300 hover:text-white flex items-center justify-center transition border border-zinc-800"
+                title="হোয়াটসঅ্যাপ হেল্পলাইন ও চ্যানেল"
+              >
                 <Phone className="w-4 h-4" />
               </a>
             </div>

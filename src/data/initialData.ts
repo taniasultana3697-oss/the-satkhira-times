@@ -11,7 +11,7 @@ export const INITIAL_SETTINGS: WebsiteSettings = {
   dhakaOfficeAddress: 'বাড়ি-১২, রোড-০৫, বিজয়নগর, ঢাকা-১০০০',
   facebookUrl: 'https://facebook.com/TheSatkhiraTimes',
   twitterUrl: 'https://twitter.com/SatkhiraTimes',
-  telegramUrl: 'https://t.me/SatkhiraTimesOfficial',
+  telegramUrl: 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2',
   whatsappNumber: '+8801711234567',
   youtubeUrl: 'https://youtube.com/@TheSatkhiraTimes',
   googleNewsUrl: 'https://news.google.com',

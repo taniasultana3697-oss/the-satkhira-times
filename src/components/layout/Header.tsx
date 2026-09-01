@@ -157,10 +157,22 @@ export const Header: React.FC = () => {
               <a href={settings.twitterUrl} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition">
                 <Twitter className="w-3.5 h-3.5" />
               </a>
-              <a href={settings.telegramUrl} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition">
+              <a 
+                href={settings.telegramUrl || 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2'} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-zinc-400 hover:text-[#229ED9] transition"
+                title="টেলিগ্রাম চ্যানেলে যুক্ত হন"
+              >
                 <Send className="w-3.5 h-3.5" />
               </a>
-              <a href={`https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition">
+              <a 
+                href="https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-zinc-400 hover:text-[#25D366] transition"
+                title="হোয়াটসঅ্যাপে যোগাযোগ ও খবর"
+              >
                 <Phone className="w-3.5 h-3.5" />
               </a>
             </div>

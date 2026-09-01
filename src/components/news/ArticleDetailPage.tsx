@@ -338,13 +338,25 @@ export const ArticleDetailPage: React.FC = () => {
         </p>
 
         {/* Content Paragraphs with in-article ad slot */}
-        <div className="space-y-4 whitespace-pre-line leading-relaxed font-bangla">
-          {article.content}
-        </div>
+        <div className="space-y-5 leading-relaxed font-bangla text-slate-800 dark:text-slate-200">
+          {article.content
+            .split(/\n\s*\n|\n/)
+            .map(p => p.trim())
+            .filter(p => p.length > 0)
+            .map((paragraph, index, arr) => (
+              <React.Fragment key={index}>
+                <p className="text-base sm:text-lg leading-relaxed text-justify">
+                  {paragraph}
+                </p>
 
-        {/* In-Article Ad Banner */}
-        <div className="no-print">
-          <AdBanner slot="in_article" />
+                {/* Insert Native Ad right inside the post (after 2nd paragraph or middle of short post) */}
+                {(index === 1 || (arr.length <= 2 && index === 0)) && (
+                  <div className="my-6 no-print">
+                    <AdBanner slot="in_article" />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
         </div>
       </div>
 
