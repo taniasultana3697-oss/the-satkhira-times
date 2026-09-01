@@ -1,0 +1,6 @@
+{
+  "name": "THE SATKHIRA TIMES",
+  "description": "দ্য সাতক্ষীরা টাইমস - আন্তর্জাতিক মানের আধুনিক ও প্রফেশনাল অনলাইন নিউজ পোর্টাল। সত্য ও নিরপেক্ষ সংবাদ।",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

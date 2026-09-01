@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-bangla: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-serif-bangla: 'Tiro Bangla', 'Times New Roman', Times, Georgia, serif;
+    --font-brand: 'Cinzel', 'Times New Roman', 'Playfair Display', serif;
+    --brand-crimson: #8B0000;
+  }
+
+  body {
+    font-family: var(--font-bangla);
+    background-color: #ffffff;
+    color: #111827;
+  }
+}
+
+.font-bangla {
+  font-family: var(--font-bangla);
+}
+
+.font-serif-bangla {
+  font-family: var(--font-serif-bangla);
+}
+
+.font-brand {
+  font-family: var(--font-brand);
+}
+
+.text-brand-crimson {
+  color: #8B0000;
+}
+
+.bg-brand-crimson {
+  background-color: #8B0000;
+}
+
+.border-brand-crimson {
+  border-color: #8B0000;
+}
+
+/* Custom scrollbar for clean minimal newspaper look */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #18181b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8B0000;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #600000;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Print styles for newspaper printing */
+@media print {
+  header, footer, .no-print, .ad-banner, .comment-section {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 14pt;
+  }
+  .printable-article {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
