@@ -19,7 +19,16 @@ export const INITIAL_SETTINGS: WebsiteSettings = {
   metaDescriptionDefault: 'THE SATKHIRA TIMES - সাতক্ষীরা, জাতীয়, আন্তর্জাতিক, রাজনীতি ও খেলাধুলার বস্তুনিষ্ঠ ও নিরপেক্ষ সংবাদ মাধ্যম।',
   footerNotice: '© ২০২৬ দ্য সাতক্ষীরা টাইমস কর্তৃক সর্বস্বত্ব সংরক্ষিত। অনুমতি ছাড়া এই ওয়েবসাইটের যেকোনো কনটেন্ট বা ছবি পুনঃপ্রকাশ সম্পূর্ণ বেআইনি।',
   ePaperUrl: '#epaper',
-  liveStreamUrl: 'https://www.youtube.com'
+  liveStreamUrl: 'https://www.youtube.com',
+  seoSettings: {
+    siteTitle: 'THE SATKHIRA TIMES | সত্য ও নিরপেক্ষ সংবাদ - দ্য সাতক্ষীরা টাইমস',
+    metaDescription: 'THE SATKHIRA TIMES - সত্য ও নিরপেক্ষ সংবাদ। সাতক্ষীরা, জাতীয়, আন্তর্জাতিক, রাজনীতি, অর্থনীতি ও খেলাধুলার সর্বশেষ তাজা খবর।',
+    metaKeywords: 'সাতক্ষীরা নিউজ, দ্য সাতক্ষীরা টাইমস, Satkhira Times, বাংলা সংবাদ, সুন্দরবন খবর, ভোমরা স্থলবন্দর, জাতীয় খবর',
+    ogImageUrl: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1200&auto=format&fit=crop&q=80',
+    canonicalUrl: 'https://satkhiratimes.com',
+    googleAnalyticsId: '',
+    googleSearchConsoleCode: ''
+  }
 };
 
 export const INITIAL_BREAKING_NEWS: BreakingNewsItem[] = [

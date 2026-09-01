@@ -42,14 +42,30 @@ export const CategoryArchiveView: React.FC = () => {
   // Filter articles
   let filtered = articles.filter(a => a.status === 'published');
 
-  if (targetCat) {
-    filtered = filtered.filter(a => a.category === targetCat || a.tags.includes(targetCat));
-  }
+  const selectedUpazila = targetUpazila || (activeUpazilaFilter !== 'সকল' ? activeUpazilaFilter : '');
 
-  if (targetUpazila) {
-    filtered = filtered.filter(a => a.upazila === targetUpazila);
-  } else if (activeUpazilaFilter !== 'সকল' && targetCat === 'সাতক্ষীরা') {
-    filtered = filtered.filter(a => a.upazila === activeUpazilaFilter);
+  if (targetCat) {
+    if (targetCat === 'সাতক্ষীরা') {
+      if (selectedUpazila && selectedUpazila !== 'সকল') {
+        filtered = filtered.filter(a => 
+          a.upazila === selectedUpazila || 
+          a.tags.includes(selectedUpazila) || 
+          a.title.includes(selectedUpazila) ||
+          a.content.includes(selectedUpazila) ||
+          a.location?.includes(selectedUpazila)
+        );
+      } else {
+        filtered = filtered.filter(a => 
+          a.category === 'সাতক্ষীরা' || 
+          Boolean(a.upazila) || 
+          a.tags.includes('সাতক্ষীরা') || 
+          a.location?.includes('সাতক্ষীরা') ||
+          SATKHIRA_UPAZILAS.some(u => u !== 'সকল' && (a.title.includes(u) || a.tags.includes(u)))
+        );
+      }
+    } else {
+      filtered = filtered.filter(a => a.category === targetCat || a.tags.includes(targetCat));
+    }
   }
 
   if (searchQuery.trim()) {

@@ -284,36 +284,47 @@ export const Header: React.FC = () => {
               </button>
 
               {/* Satkhira Special Dropdown */}
-              <div className="relative group">
+              <div className="relative group flex items-center">
                 <button
-                  onClick={() => setSatkhiraDropdownOpen(!satkhiraDropdownOpen)}
-                  onMouseEnter={() => setSatkhiraDropdownOpen(true)}
-                  className={`px-3 py-1 text-sm font-bold flex items-center gap-1 transition ${
+                  onClick={() => handleCategoryClick('সাতক্ষীরা')}
+                  className={`px-2.5 py-1 text-sm font-bold flex items-center gap-1 transition ${
                     selectedCategory?.startsWith('সাতক্ষীরা') 
                       ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' 
                       : 'text-gray-800 dark:text-gray-200 hover:text-[#8B0000]'
                   }`}
                 >
-                  <span className="flex items-center gap-1">
-                    <Flame className="w-3.5 h-3.5 text-[#8B0000]" />
-                    সাতক্ষীরা
-                  </span>
+                  <Flame className="w-3.5 h-3.5 text-[#8B0000]" />
+                  <span>সাতক্ষীরা</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSatkhiraDropdownOpen(!satkhiraDropdownOpen)}
+                  onMouseEnter={() => setSatkhiraDropdownOpen(true)}
+                  className="p-1 text-gray-500 hover:text-[#8B0000] transition"
+                  title="উপজেলা নির্বাচন করুন"
+                >
                   <ChevronDown className="w-3.5 h-3.5" />
                 </button>
 
                 {satkhiraDropdownOpen && (
                   <div 
                     onMouseLeave={() => setSatkhiraDropdownOpen(false)}
-                    className="absolute top-full left-0 w-48 bg-white dark:bg-zinc-900 text-gray-800 dark:text-gray-200 rounded-b shadow-xl border-t-2 border-[#8B0000] border-x border-b border-gray-200 dark:border-zinc-800 py-2 z-50 animate-fadeIn"
+                    className="absolute top-full left-0 w-52 bg-white dark:bg-zinc-900 text-gray-800 dark:text-gray-200 rounded-b shadow-xl border-t-2 border-[#8B0000] border-x border-b border-gray-200 dark:border-zinc-800 py-2 z-50 animate-fadeIn"
                   >
                     <div className="text-[10px] font-bold text-gray-400 px-3 py-1 uppercase tracking-wider font-sans">
-                      সাতক্ষীরার উপজেলাসমূহ
+                      সাতক্ষীরা জেলা ও উপজেলাসমূহ
                     </div>
-                    {SATKHIRA_UPAZILAS.map((upazila) => (
+                    <button
+                      onClick={() => handleCategoryClick('সাতক্ষীরা')}
+                      className="w-full text-left px-3 py-1.5 text-xs font-bold text-red-700 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-zinc-800 transition flex items-center justify-between border-b border-gray-100 dark:border-zinc-800"
+                    >
+                      <span>সকল সাতক্ষীরা সংবাদ</span>
+                    </button>
+                    {SATKHIRA_UPAZILAS.filter(u => u !== 'সকল').map((upazila) => (
                       <button
                         key={upazila}
                         onClick={() => handleUpazilaClick(upazila)}
-                        className="w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-[#8B0000] transition flex items-center justify-between"
+                        className="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-[#8B0000] transition flex items-center justify-between"
                       >
                         <span>{upazila}</span>
                       </button>
@@ -323,7 +334,7 @@ export const Header: React.FC = () => {
               </div>
 
               {/* Standard Categories */}
-              {INITIAL_CATEGORIES.slice(1, 8).map((cat) => (
+              {INITIAL_CATEGORIES.slice(1, 7).map((cat) => (
                 <button
                   key={cat.name}
                   onClick={() => handleCategoryClick(cat.name)}

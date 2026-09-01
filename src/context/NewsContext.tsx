@@ -158,12 +158,19 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const saved = localStorage.getItem('satkhira_news_settings');
     if (saved) {
       try {
-        const parsed: WebsiteSettings = JSON.parse(saved);
-        if (parsed.telegramUrl === 'https://t.me/SatkhiraTimesOfficial' || !parsed.telegramUrl) {
-          parsed.telegramUrl = INITIAL_SETTINGS.telegramUrl;
-          localStorage.setItem('satkhira_news_settings', JSON.stringify(parsed));
+        const parsed = JSON.parse(saved);
+        const merged: WebsiteSettings = {
+          ...INITIAL_SETTINGS,
+          ...parsed,
+          seoSettings: {
+            ...INITIAL_SETTINGS.seoSettings,
+            ...(parsed.seoSettings || {})
+          }
+        };
+        if (merged.telegramUrl === 'https://t.me/SatkhiraTimesOfficial' || !merged.telegramUrl) {
+          merged.telegramUrl = INITIAL_SETTINGS.telegramUrl;
         }
-        return parsed;
+        return merged;
       } catch {
         return INITIAL_SETTINGS;
       }
@@ -284,35 +291,35 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (currentView === 'article' && selectedArticleId) {
       const currentArt = articles.find(a => a.id === selectedArticleId);
       if (currentArt) {
-        updateArticleMetaTags(currentArt);
+        updateArticleMetaTags(currentArt, settings);
       }
       url.searchParams.set('article', selectedArticleId);
       url.searchParams.delete('category');
       url.searchParams.delete('view');
       window.history.replaceState({ view: 'article', id: selectedArticleId }, '', url.toString());
     } else if (currentView === 'category' && selectedCategory) {
-      resetHomeMetaTags();
+      resetHomeMetaTags(settings);
       url.searchParams.set('category', selectedCategory);
       url.searchParams.delete('article');
       url.searchParams.delete('id');
       url.searchParams.delete('view');
       window.history.replaceState({ view: 'category', category: selectedCategory }, '', url.toString());
     } else if (currentView === 'home') {
-      resetHomeMetaTags();
+      resetHomeMetaTags(settings);
       url.searchParams.delete('article');
       url.searchParams.delete('id');
       url.searchParams.delete('category');
       url.searchParams.delete('view');
       window.history.replaceState({ view: 'home' }, '', url.pathname);
     } else {
-      resetHomeMetaTags();
+      resetHomeMetaTags(settings);
       url.searchParams.set('view', currentView);
       url.searchParams.delete('article');
       url.searchParams.delete('id');
       url.searchParams.delete('category');
       window.history.replaceState({ view: currentView }, '', url.toString());
     }
-  }, [currentView, selectedArticleId, selectedCategory, articles]);
+  }, [currentView, selectedArticleId, selectedCategory, articles, settings]);
 
   // Handle Browser Back / Forward buttons
   useEffect(() => {
@@ -444,7 +451,21 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateSettings = (newSettings: Partial<WebsiteSettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings(prev => {
+      const merged: WebsiteSettings = {
+        ...prev,
+        ...newSettings,
+        seoSettings: {
+          ...(prev.seoSettings || INITIAL_SETTINGS.seoSettings || {
+            siteTitle: 'THE SATKHIRA TIMES',
+            metaDescription: ''
+          }),
+          ...(newSettings.seoSettings || {})
+        }
+      };
+      resetHomeMetaTags(merged);
+      return merged;
+    });
   };
 
   const votePoll = (optionId: string) => {

@@ -79,6 +79,16 @@ export interface AdConfiguration {
   note?: string;
 }
 
+export interface SeoSettings {
+  siteTitle: string;
+  metaDescription: string;
+  metaKeywords?: string;
+  ogImageUrl?: string;
+  canonicalUrl?: string;
+  googleAnalyticsId?: string;
+  googleSearchConsoleCode?: string;
+}
+
 export interface WebsiteSettings {
   siteName: string;
   tagline: string;
@@ -99,6 +109,7 @@ export interface WebsiteSettings {
   footerNotice: string;
   ePaperUrl?: string;
   liveStreamUrl?: string;
+  seoSettings?: SeoSettings;
 }
 
 export interface CommentItem {
