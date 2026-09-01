@@ -7,6 +7,7 @@ import {
   getShareLinks 
 } from '../../utils/helpers';
 import { AdBanner } from '../ads/AdBanner';
+import { SocialShareModal } from './SocialShareModal';
 import { 
   Clock, 
   Eye, 
@@ -47,6 +48,7 @@ export const ArticleDetailPage: React.FC = () => {
   } = useNews();
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedPostText, setCopiedPostText] = useState(false);
   const [commentName, setCommentName] = useState('');
@@ -270,20 +272,21 @@ export const ArticleDetailPage: React.FC = () => {
             <span className="text-xs font-semibold text-gray-500 mr-1 hidden sm:inline font-bangla">শেয়ার:</span>
             
             <button 
+              onClick={() => setIsShareModalOpen(true)}
+              className="px-2.5 py-1.5 bg-[#8B0000] text-white rounded hover:bg-black transition flex items-center gap-1.5 text-xs font-bold font-bangla shadow-sm"
+              title="সোশ্যাল শেয়ার প্যানেল খুলুন"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>সোশ্যাল শেয়ার</span>
+            </button>
+
+            <button 
               onClick={handleFacebookShare}
               className="px-2.5 py-1.5 bg-[#1877F2] text-white rounded hover:opacity-90 transition flex items-center gap-1.5 text-xs font-bold font-bangla shadow-sm"
               title="ফেসবুকে ছবি সহ শেয়ার করুন"
             >
               <Facebook className="w-3.5 h-3.5" />
               <span>ফেসবুক</span>
-            </button>
-
-            <button 
-              onClick={handleNativeShare}
-              className="p-1.5 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition"
-              title="ডিভাইস শেয়ার (ফেসবুক/হোয়াটসঅ্যাপ অ্যাপ)"
-            >
-              <Share2 className="w-4 h-4" />
             </button>
 
             <a 
@@ -295,6 +298,14 @@ export const ArticleDetailPage: React.FC = () => {
             >
               <Phone className="w-4 h-4" />
             </a>
+
+            <button 
+              onClick={handleNativeShare}
+              className="p-1.5 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition"
+              title="ডিভাইস শেয়ার (ফেসবুক/হোয়াটসঅ্যাপ অ্যাপ)"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
 
             <a 
               href={shareLinks.telegram} 
@@ -428,18 +439,34 @@ export const ArticleDetailPage: React.FC = () => {
         <div>
           <h4 className="font-bold text-base font-serif-bangla flex items-center gap-2">
             <Share2 className="w-4 h-4 text-red-500" />
-            ফেসবুকে সরাসরি শেয়ার করুন
+            সোশ্যাল মিডিয়ায় সরাসরি শেয়ার করুন
           </h4>
-          <p className="text-xs text-slate-300 mt-0.5">পোস্টের মূল ছবি ও শিরোনাম সহ ফেসবুকে শেয়ার হবে</p>
+          <p className="text-xs text-slate-300 mt-0.5">পোস্টের মূল ছবি, শিরোনাম ও লিঙ্ক সহ ফেসবুক এবং হোয়াটসঅ্যাপে শেয়ার হবে</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <button 
+            onClick={() => setIsShareModalOpen(true)}
+            className="bg-[#8B0000] hover:bg-black text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition shadow-md font-bangla active:scale-95"
+          >
+            <Share2 className="w-4 h-4" /> সোশ্যাল শেয়ার প্যানেল
+          </button>
+
           <button 
             onClick={handleFacebookShare}
             className="bg-[#1877F2] hover:bg-[#166fe5] text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition shadow-md font-bangla active:scale-95"
           >
-            <Facebook className="w-4 h-4" /> ফেসবুকে শেয়ার
+            <Facebook className="w-4 h-4" /> ফেসবুক
           </button>
           
+          <a
+            href={shareLinks.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition font-bangla shadow-md"
+          >
+            <Phone className="w-4 h-4" /> হোয়াটসঅ্যাপ
+          </a>
+
           <button 
             onClick={handleNativeShare}
             className="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition font-bangla shadow-md"
@@ -675,6 +702,13 @@ export const ArticleDetailPage: React.FC = () => {
           </div>
         </section>
       )}
+
+      {/* Social Share Modal with Card Generator, WhatsApp, Facebook, QR & Copy */}
+      <SocialShareModal 
+        article={article} 
+        isOpen={isShareModalOpen} 
+        onClose={() => setIsShareModalOpen(false)} 
+      />
 
     </div>
   );
