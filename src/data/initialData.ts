@@ -1,4 +1,4 @@
-import { NewsArticle, BreakingNewsItem, AdConfiguration, WebsiteSettings, PollQuestion, PhotoStory, VideoNews } from '../types';
+import { NewsArticle, BreakingNewsItem, AdConfiguration, WebsiteSettings, PollQuestion, PhotoStory, VideoNews, ReporterAccount } from '../types';
 
 export const INITIAL_SETTINGS: WebsiteSettings = {
   siteName: 'THE SATKHIRA TIMES',
@@ -568,3 +568,81 @@ export const SATKHIRA_UPAZILAS = [
   'দেবহাটা',
   'কলারোয়া'
 ] as const;
+
+export const INITIAL_REPORTERS: ReporterAccount[] = [
+  {
+    id: 'rep-1',
+    name: 'মো: মনিরুল ইসলাম',
+    email: 'monirul@satkhiratimes.com',
+    phone: '01712345001',
+    password: '1234',
+    designation: 'উপকূল ও সুন্দরবন প্রতিনিধি',
+    upazila: 'শ্যামনগর',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    status: 'active',
+    canAutoPublish: true,
+    joinedDate: '২০২৫-০১-১০',
+    pressCardNumber: 'ST-REP-2025-01',
+    bio: 'উপকূলীয় জলবায়ু পরিবর্তন, সুন্দরবনের পরিবেশ ও জেলে-বাওয়ালী সম্প্রদায়ের জীবন নিয়ে নিয়মিত অনুসন্ধানী প্রতিবেদন তৈরি করেন।'
+  },
+  {
+    id: 'rep-2',
+    name: 'এস এম হাবিবুর রহমান',
+    email: 'habib@satkhiratimes.com',
+    phone: '01712345002',
+    password: '1234',
+    designation: 'কালীগঞ্জ ও দেবহাটা প্রতিনিধি',
+    upazila: 'কালীগঞ্জ',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    status: 'active',
+    canAutoPublish: true,
+    joinedDate: '২০২৫-০২-১৫',
+    pressCardNumber: 'ST-REP-2025-02',
+    bio: 'সীমান্ত বাণিজ্য, কৃষি অর্থনীতি ও স্থানীয় উন্নয়ন কর্মকাণ্ড নিয়ে কাজ করেন।'
+  },
+  {
+    id: 'rep-3',
+    name: 'কাজী শামীম আহমেদ',
+    email: 'shamim@satkhiratimes.com',
+    phone: '01712345003',
+    password: '1234',
+    designation: 'তালা ও আশাশুনি প্রতিনিধি',
+    upazila: 'তালা',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    status: 'active',
+    canAutoPublish: false,
+    joinedDate: '২০২৫-০৪-০১',
+    pressCardNumber: 'ST-REP-2025-03',
+    bio: 'কপোতাক্ষ নদের খনন, জলাবদ্ধতা ও গ্রামীণ জনজীবনের বিভিন্ন সমস্যা তুলে ধরেন।'
+  },
+  {
+    id: 'rep-4',
+    name: 'মোছা: সাবরিনা সুলতানা',
+    email: 'sabrina@satkhiratimes.com',
+    phone: '01712345004',
+    password: '1234',
+    designation: 'স্টাফ রিপোর্টার (সাতক্ষীরা সদর)',
+    upazila: 'সাতক্ষীরা সদর',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+    status: 'active',
+    canAutoPublish: true,
+    joinedDate: '২০২৫-০৩-২০',
+    pressCardNumber: 'ST-REP-2025-04',
+    bio: 'আইন-আদালত, জেলা প্রশাসন ও নাগরিক সেবা সংক্রান্ত খবরাখবর কভার করেন।'
+  },
+  {
+    id: 'rep-5',
+    name: 'আব্দুল কাদের চৌধুরী',
+    email: 'kader@satkhiratimes.com',
+    phone: '01712345005',
+    password: '1234',
+    designation: 'কলারোয়া প্রতিনিধি (আবেদন প্রক্রিয়াধীন)',
+    upazila: 'কলারোয়া',
+    status: 'pending',
+    canAutoPublish: false,
+    joinedDate: '২০২৬-০২-২৮',
+    pressCardNumber: 'ST-REP-PENDING',
+    bio: 'সীমান্ত এলাকার চোরাচালান প্রতিরোধ ও স্থানীয় শিক্ষা খাতের খবর সংগ্রহ করেন।'
+  }
+];
+

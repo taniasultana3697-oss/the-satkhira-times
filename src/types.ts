@@ -48,7 +48,7 @@ export interface NewsArticle {
   isTrending?: boolean;
   viewCount: number;
   tags: string[];
-  status: 'published' | 'draft' | 'scheduled';
+  status: 'published' | 'draft' | 'scheduled' | 'pending_review';
   seo: {
     metaTitle?: string;
     metaDescription?: string;
@@ -164,3 +164,50 @@ export interface MediaItem {
   type: string;
   uploadedAt: string;
 }
+
+export interface RevenueSettings {
+  cpmRateUsd: number; // e.g. $1.20 per 1000 pageviews
+  usdToBdtRate: number; // e.g. 122.50 BDT per USD
+  directAdMonthlyBdt: number; // Fixed direct local ads income
+  activeAdNetwork: 'adsterra' | 'adsense' | 'all';
+}
+
+export interface DailyTrafficRecord {
+  date: string; // e.g. '২০২৬-০৩-০১' or formatted
+  dayName: string; // e.g. 'সোমবার'
+  visitors: number;
+  pageviews: number;
+  earningsBdt: number;
+  earningsUsd: number;
+}
+
+export interface TrafficSourceItem {
+  name: string;
+  percentage: number;
+  count: number;
+  color: string;
+}
+
+export interface LocationTrafficItem {
+  name: string;
+  percentage: number;
+  count: number;
+}
+
+export interface ReporterAccount {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  password: string; // Individual secret password for each reporter
+  designation: string; // e.g. 'সাতক্ষীরা সদর প্রতিনিধি', 'শ্যামনগর প্রতিনিধি', 'বিশেষ প্রতিবেদক'
+  upazila: SatkhiraUpazila;
+  avatar?: string;
+  status: 'active' | 'pending' | 'suspended';
+  canAutoPublish: boolean;
+  joinedDate: string;
+  pressCardNumber: string;
+  bio?: string;
+  nidOrIdNumber?: string;
+}
+

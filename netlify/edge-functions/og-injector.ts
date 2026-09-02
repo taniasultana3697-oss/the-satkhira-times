@@ -161,6 +161,7 @@ export default async function handler(request: Request, context: any) {
     <link rel="image_src" href="${safeImage}" />
 
     <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="fb:app_id" content="966242223397117" />
     <meta property="og:site_name" content="THE SATKHIRA TIMES" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="${rawTitle}" />

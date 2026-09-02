@@ -89,6 +89,7 @@ function injectArticleMetaTags(html: string, articleId: string | null, hostUrl: 
     <link rel="image_src" href="${imageUrl}" />
 
     <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="fb:app_id" content="966242223397117" />
     <meta property="og:site_name" content="${siteName}" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="${rawTitle}" />

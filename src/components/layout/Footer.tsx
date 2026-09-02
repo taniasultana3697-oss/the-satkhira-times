@@ -16,7 +16,8 @@ import {
   CheckCircle2,
   ShieldCheck,
   FileCode,
-  Lock
+  Lock,
+  PenSquare
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -242,13 +243,20 @@ export const Footer: React.FC = () => {
                   ব্যবহারের শর্তাবলী
                 </button>
               </li>
-              <li className="pt-2">
+              <li className="pt-2 space-y-2">
+                <button
+                  onClick={() => { setCurrentView('reporter'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="text-emerald-400 hover:text-white font-bold flex items-center gap-1 font-sans uppercase tracking-wider text-[11px]"
+                >
+                  <PenSquare className="w-3.5 h-3.5" />
+                  <span>সাংবাদিক পোর্টাল (লগইন)</span>
+                </button>
                 <button
                   onClick={() => { setCurrentView('admin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="text-[#8B0000] hover:text-white font-bold flex items-center gap-1 font-sans uppercase tracking-wider text-[11px]"
                 >
                   <Lock className="w-3.5 h-3.5" />
-                  <span>অ্যাডমিন ড্যাশবোর্ড</span>
+                  <span>প্রধান অ্যাডমিন প্যানেল</span>
                 </button>
               </li>
             </ul>

@@ -13,6 +13,7 @@ import { CategoryArchiveView } from './components/news/CategoryArchiveView';
 import { BookmarksView } from './components/news/BookmarksView';
 import { StaticPages } from './components/pages/StaticPages';
 import { AdminLayout } from './components/admin/AdminLayout';
+import { ReporterPortal } from './components/reporter/ReporterPortal';
 import { AdBanner } from './components/ads/AdBanner';
 import { AdsterraGlobalScripts } from './components/ads/AdsterraGlobalScripts';
 import { PopupAdModal } from './components/ads/PopupAdModal';
@@ -31,8 +32,8 @@ const MainPortalContent: React.FC = () => {
       {/* Top Main Navigation */}
       <Header />
 
-      {/* Breaking News Ticker (visible on all public news views) */}
-      {currentView !== 'admin' && <BreakingTicker />}
+      {/* Breaking News Ticker (visible on public news views) */}
+      {currentView !== 'admin' && currentView !== 'reporter' && <BreakingTicker />}
 
       {/* Main Content Router */}
       <main className="flex-grow">
@@ -72,6 +73,8 @@ const MainPortalContent: React.FC = () => {
         {currentView === 'bookmarks' && <BookmarksView />}
 
         {currentView === 'admin' && <AdminLayout />}
+
+        {currentView === 'reporter' && <ReporterPortal />}
 
         {(currentView === 'about' || currentView === 'contact' || currentView === 'privacy' || currentView === 'terms') && (
           <StaticPages page={currentView} />

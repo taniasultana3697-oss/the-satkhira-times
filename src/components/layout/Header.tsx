@@ -21,7 +21,8 @@ import {
   Send, 
   Phone,
   Flame,
-  Clock
+  Clock,
+  PenSquare
 } from 'lucide-react';
 import { INITIAL_CATEGORIES, SATKHIRA_UPAZILAS } from '../../data/initialData';
 
@@ -38,7 +39,8 @@ export const Header: React.FC = () => {
     setSearchQuery,
     readingFontSize,
     setReadingFontSize,
-    currentView
+    currentView,
+    currentReporter
   } = useNews();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -177,6 +179,23 @@ export const Header: React.FC = () => {
               </a>
             </div>
 
+            {/* Reporter Portal Button */}
+            <button
+              onClick={() => {
+                setCurrentView('reporter');
+                setSelectedArticleId(null);
+              }}
+              className={`flex items-center gap-1 font-sans font-bold text-[11px] px-2.5 py-0.5 rounded transition shadow-sm tracking-wider ${
+                currentReporter 
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
+                  : 'bg-zinc-800 hover:bg-emerald-700 hover:text-white text-zinc-300 border border-zinc-700'
+              }`}
+              title="সাংবাদিক ও প্রতিনিধি ডেস্ক"
+            >
+              <PenSquare className="w-3 h-3 text-emerald-400" />
+              <span>{currentReporter ? currentReporter.name.split(' ')[0] : 'সাংবাদিক ডেস্ক'}</span>
+            </button>
+
             {/* Admin Panel Button */}
             <button
               onClick={() => {
@@ -184,7 +203,7 @@ export const Header: React.FC = () => {
                 setSelectedArticleId(null);
               }}
               className="flex items-center gap-1 bg-[#8B0000] hover:bg-red-800 text-white font-sans uppercase font-bold text-[11px] px-2.5 py-0.5 rounded transition shadow-sm tracking-wider"
-              title="অ্যাডমিন প্যানেল"
+              title="প্রধান অ্যাডমিন প্যানেল"
             >
               <Lock className="w-3 h-3" />
               <span>অ্যাডমিন</span>
@@ -591,23 +610,36 @@ export const Header: React.FC = () => {
                 <span>বুকমার্ক ({bookmarkedIds.length})</span>
               </button>
 
-              <button
-                onClick={() => {
-                  setCurrentView('admin');
-                  setMobileMenuOpen(false);
-                }}
-                className="flex items-center gap-1 text-[#8B0000] font-bold font-sans uppercase"
-              >
-                <Lock className="w-3.5 h-3.5" />
-                <span>অ্যাডমিন প্যানেল</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setCurrentView('reporter');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold font-sans"
+                >
+                  <PenSquare className="w-3.5 h-3.5" />
+                  <span>সাংবাদিক পোর্টাল</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setCurrentView('admin');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center gap-1 text-[#8B0000] font-bold font-sans uppercase"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>অ্যাডমিন</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
       </nav>
 
       {/* Top 728x90 Header Adsterra Banner */}
-      {currentView !== 'admin' && (
+      {currentView !== 'admin' && currentView !== 'reporter' && (
         <div className="bg-transparent py-2">
           <AdBanner slot="header_banner" />
         </div>

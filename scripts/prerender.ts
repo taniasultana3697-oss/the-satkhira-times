@@ -42,6 +42,7 @@ export function prerenderArticles() {
     <link rel="image_src" href="${imageUrl}" />
 
     <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="fb:app_id" content="966242223397117" />
     <meta property="og:site_name" content="${escapeHtml(INITIAL_SETTINGS.siteName)}" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://the-satkhira-times.netlify.app/news/${article.id}" />
