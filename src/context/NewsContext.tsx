@@ -146,7 +146,19 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (saved) {
       try {
         const parsed: NewsArticle[] = JSON.parse(saved);
-        return parsed.map(a => {
+        // Custom user-created articles (e.g. from reporter portal or admin)
+        const customArticles = parsed.filter(p => !INITIAL_ARTICLES.some(init => init.id === p.id));
+        
+        // Initial articles: use latest INITIAL_ARTICLES definitions so fresh portal news is always visible
+        const currentInitialArticles = INITIAL_ARTICLES.map(init => {
+          const userModified = parsed.find(p => p.id === init.id);
+          // If user edited viewCount or specific fields, preserve them, but ensure fields exist
+          return userModified ? { ...init, viewCount: Math.max(init.viewCount, userModified.viewCount || 0) } : init;
+        });
+
+        // Combine: custom newly published articles first, then initial portal articles
+        const combined = [...customArticles, ...currentInitialArticles];
+        return combined.map(a => {
           if (a.id === 'art-9' && (a.author.name === 'অধ্যাপক এম এ হাসান' || a.author.name.includes('এম এ হাসান'))) {
             return {
               ...a,
@@ -170,7 +182,16 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Breaking News
   const [breakingNews, setBreakingNews] = useState<BreakingNewsItem[]>(() => {
     const saved = localStorage.getItem('satkhira_news_breaking');
-    return saved ? JSON.parse(saved) : INITIAL_BREAKING_NEWS;
+    if (saved) {
+      try {
+        const parsed: BreakingNewsItem[] = JSON.parse(saved);
+        const customBreaking = parsed.filter(p => !INITIAL_BREAKING_NEWS.some(init => init.id === p.id));
+        return [...customBreaking, ...INITIAL_BREAKING_NEWS];
+      } catch {
+        return INITIAL_BREAKING_NEWS;
+      }
+    }
+    return INITIAL_BREAKING_NEWS;
   });
 
   // Ads
