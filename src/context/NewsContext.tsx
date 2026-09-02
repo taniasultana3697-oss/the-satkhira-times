@@ -8,7 +8,7 @@ import {
   PhotoStory, 
   VideoNews, 
   NewsCategory, 
-  CommentItem,
+  CommentItem, 
   MediaItem,
   RevenueSettings,
   DailyTrafficRecord,
@@ -28,6 +28,12 @@ import {
   INITIAL_REPORTERS
 } from '../data/initialData';
 import { updateArticleMetaTags, resetHomeMetaTags } from '../utils/seo';
+import { 
+  createArticleSlug, 
+  getArticleUrl, 
+  getArticleShareUrl, 
+  parseRouteFromUrl 
+} from '../utils/helpers';
 
 interface NewsContextType {
   // Articles
@@ -104,6 +110,15 @@ interface NewsContextType {
   setSelectedCategory: (cat: string | null) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+
+  // Dedicated URL Routing Helpers
+  openArticle: (id: string, pushHistory?: boolean) => void;
+  goToHome: (pushHistory?: boolean) => void;
+  openCategory: (cat: string, pushHistory?: boolean) => void;
+  openView: (view: 'home' | 'article' | 'category' | 'search' | 'admin' | 'reporter' | 'about' | 'contact' | 'privacy' | 'terms' | 'bookmarks', pushHistory?: boolean) => void;
+  getArticleUrl: (article: NewsArticle | { id: string; title?: string } | string) => string;
+  getArticleShareUrl: (article: NewsArticle) => string;
+  createArticleSlug: (title: string) => string;
   
   // Theme & Reading experience
   isDarkMode: boolean;
@@ -278,104 +293,143 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   // Router State initialized from URL query params or pathnames (/news/:id)
-  const [currentView, setCurrentView] = useState<'home' | 'article' | 'category' | 'search' | 'admin' | 'about' | 'contact' | 'privacy' | 'terms' | 'bookmarks'>(() => {
+  const [currentView, setCurrentView] = useState<'home' | 'article' | 'category' | 'search' | 'admin' | 'reporter' | 'about' | 'contact' | 'privacy' | 'terms' | 'bookmarks'>(() => {
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('article') || params.get('id')) return 'article';
-      const pathMatch = window.location.pathname.match(/^\/(?:news|article)\/([^/?]+)/);
-      if (pathMatch && pathMatch[1]) return 'article';
-      if (params.get('category')) return 'category';
-      if (params.get('view')) return (params.get('view') as any) || 'home';
+      const route = parseRouteFromUrl();
+      if (route.articleId) return 'article';
+      if (route.category) return 'category';
+      if (route.view) return route.view as any;
     }
     return 'home';
   });
 
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('article') || params.get('id')) {
-        return params.get('article') || params.get('id');
-      }
-      const pathMatch = window.location.pathname.match(/^\/(?:news|article)\/([^/?]+)/);
-      if (pathMatch && pathMatch[1]) return pathMatch[1];
+      const route = parseRouteFromUrl();
+      return route.articleId;
     }
     return null;
   });
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('category') || null;
+      const route = parseRouteFromUrl();
+      return route.category;
     }
     return null;
   });
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const route = parseRouteFromUrl();
+      return route.search || '';
+    }
+    return '';
+  });
+
+  // Dedicated Navigation Helper Functions
+  const openArticle = (id: string, pushHistory = true) => {
+    const art = articles.find(a => a.id === id);
+    setSelectedArticleId(id);
+    setCurrentView('article');
+    if (art) {
+      incrementArticleViews(id);
+      updateArticleMetaTags(art, settings);
+      if (pushHistory && typeof window !== 'undefined') {
+        const articleUrl = getArticleUrl(art);
+        window.history.pushState({ view: 'article', id }, '', articleUrl);
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToHome = (pushHistory = true) => {
+    setCurrentView('home');
+    setSelectedArticleId(null);
+    setSelectedCategory(null);
+    resetHomeMetaTags(settings);
+    if (pushHistory && typeof window !== 'undefined') {
+      window.history.pushState({ view: 'home' }, '', window.location.pathname);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCategory = (cat: string, pushHistory = true) => {
+    setSelectedCategory(cat);
+    setCurrentView('category');
+    setSelectedArticleId(null);
+    resetHomeMetaTags(settings);
+    if (pushHistory && typeof window !== 'undefined') {
+      const url = `${window.location.pathname}?category=${encodeURIComponent(cat)}`;
+      window.history.pushState({ view: 'category', category: cat }, '', url);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openView = (view: 'home' | 'article' | 'category' | 'search' | 'admin' | 'reporter' | 'about' | 'contact' | 'privacy' | 'terms' | 'bookmarks', pushHistory = true) => {
+    setCurrentView(view);
+    setSelectedArticleId(null);
+    resetHomeMetaTags(settings);
+    if (pushHistory && typeof window !== 'undefined') {
+      const url = view === 'home' ? window.location.pathname : `${window.location.pathname}?view=${view}`;
+      window.history.pushState({ view }, '', url);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Sync URL search params and OpenGraph tags dynamically
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const url = new URL(window.location.href);
-
     if (currentView === 'article' && selectedArticleId) {
       const currentArt = articles.find(a => a.id === selectedArticleId);
       if (currentArt) {
         updateArticleMetaTags(currentArt, settings);
+        const articleUrl = getArticleUrl(currentArt);
+        window.history.replaceState({ view: 'article', id: selectedArticleId }, '', articleUrl);
       }
-      url.searchParams.set('article', selectedArticleId);
-      url.searchParams.delete('category');
-      url.searchParams.delete('view');
-      window.history.replaceState({ view: 'article', id: selectedArticleId }, '', url.toString());
     } else if (currentView === 'category' && selectedCategory) {
       resetHomeMetaTags(settings);
-      url.searchParams.set('category', selectedCategory);
-      url.searchParams.delete('article');
-      url.searchParams.delete('id');
-      url.searchParams.delete('view');
-      window.history.replaceState({ view: 'category', category: selectedCategory }, '', url.toString());
+      const url = `${window.location.pathname}?category=${encodeURIComponent(selectedCategory)}`;
+      window.history.replaceState({ view: 'category', category: selectedCategory }, '', url);
     } else if (currentView === 'home') {
       resetHomeMetaTags(settings);
-      url.searchParams.delete('article');
-      url.searchParams.delete('id');
-      url.searchParams.delete('category');
-      url.searchParams.delete('view');
-      window.history.replaceState({ view: 'home' }, '', url.pathname);
+      window.history.replaceState({ view: 'home' }, '', window.location.pathname);
     } else {
       resetHomeMetaTags(settings);
-      url.searchParams.set('view', currentView);
-      url.searchParams.delete('article');
-      url.searchParams.delete('id');
-      url.searchParams.delete('category');
-      window.history.replaceState({ view: currentView }, '', url.toString());
+      const url = `${window.location.pathname}?view=${currentView}`;
+      window.history.replaceState({ view: currentView }, '', url);
     }
   }, [currentView, selectedArticleId, selectedCategory, articles, settings]);
 
   // Handle Browser Back / Forward buttons
   useEffect(() => {
     const handlePopState = () => {
-      const params = new URLSearchParams(window.location.search);
-      const articleParam = params.get('article') || params.get('id');
-      const catParam = params.get('category');
-      const viewParam = params.get('view') as any;
+      const route = parseRouteFromUrl();
 
-      if (articleParam) {
-        setSelectedArticleId(articleParam);
+      if (route.articleId) {
+        setSelectedArticleId(route.articleId);
         setCurrentView('article');
-      } else if (catParam) {
-        setSelectedCategory(catParam);
+        const art = articles.find(a => a.id === route.articleId);
+        if (art) updateArticleMetaTags(art, settings);
+      } else if (route.category) {
+        setSelectedCategory(route.category);
         setCurrentView('category');
-      } else if (viewParam) {
-        setCurrentView(viewParam);
+        resetHomeMetaTags(settings);
+      } else if (route.view) {
+        setCurrentView(route.view as any);
+        resetHomeMetaTags(settings);
       } else {
         setCurrentView('home');
         setSelectedArticleId(null);
+        setSelectedCategory(null);
+        resetHomeMetaTags(settings);
       }
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [articles, settings]);
 
 
   // Revenue Settings
@@ -898,6 +952,13 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSelectedCategory,
       searchQuery,
       setSearchQuery,
+      openArticle,
+      goToHome,
+      openCategory,
+      openView,
+      getArticleUrl,
+      getArticleShareUrl,
+      createArticleSlug,
       isDarkMode,
       toggleDarkMode,
       readingFontSize,

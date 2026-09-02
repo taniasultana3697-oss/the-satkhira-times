@@ -7,9 +7,8 @@ import { AdBanner } from '../ads/AdBanner';
 export const HeadlineHero: React.FC = () => {
   const { 
     articles, 
-    setSelectedArticleId, 
-    setCurrentView, 
-    setSelectedCategory,
+    openArticle,
+    openCategory,
     bookmarkedIds,
     toggleBookmark 
   } = useNews();
@@ -29,14 +28,12 @@ export const HeadlineHero: React.FC = () => {
     .slice(0, 5);
 
   const handleArticleClick = (id: string) => {
-    setSelectedArticleId(id);
-    setCurrentView('article');
+    openArticle(id);
   };
 
   const handleCategoryClick = (e: React.MouseEvent, cat: string) => {
     e.stopPropagation();
-    setSelectedCategory(cat);
-    setCurrentView('category');
+    openCategory(cat);
   };
 
   if (!leadArticle) return null;

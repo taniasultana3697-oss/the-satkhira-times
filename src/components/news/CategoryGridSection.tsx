@@ -17,7 +17,7 @@ export const CategoryGridSection: React.FC<CategoryGridSectionProps> = ({
   icon,
   accentColor = '#b91c1c'
 }) => {
-  const { articles, setSelectedArticleId, setCurrentView, setSelectedCategory } = useNews();
+  const { articles, openArticle, openCategory } = useNews();
 
   const categoryArticles = articles
     .filter(a => a.status === 'published' && a.category === category)
@@ -29,13 +29,11 @@ export const CategoryGridSection: React.FC<CategoryGridSectionProps> = ({
   const rest = categoryArticles.slice(1);
 
   const handleArticleClick = (id: string) => {
-    setSelectedArticleId(id);
-    setCurrentView('article');
+    openArticle(id);
   };
 
   const handleCategoryClick = () => {
-    setSelectedCategory(category);
-    setCurrentView('category');
+    openCategory(category);
   };
 
   return (

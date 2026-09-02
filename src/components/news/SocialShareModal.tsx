@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { NewsArticle } from '../../types';
-import { getShareLinks } from '../../utils/helpers';
+import { getShareLinks, getArticleUrl, getArticleShareUrl } from '../../utils/helpers';
 import { 
   X, 
   Facebook, 
@@ -39,12 +39,8 @@ export const SocialShareModal: React.FC<SocialShareModalProps> = ({
 
   if (!isOpen) return null;
 
-  const baseUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}${window.location.pathname}`
-    : 'https://the-satkhira-times.netlify.app';
-
-  const articleUrl = `${baseUrl}?article=${article.id}`;
-  const richShareUrl = `${baseUrl}?article=${article.id}&og_t=${encodeURIComponent(article.title)}&og_img=${encodeURIComponent(article.featuredImage)}`;
+  const articleUrl = getArticleUrl(article);
+  const richShareUrl = getArticleShareUrl(article);
 
   const shareLinks = getShareLinks(richShareUrl, article.title, article.featuredImage);
 

@@ -28,7 +28,9 @@ import {
   ChevronRight,
   Tag,
   Flame,
-  User
+  User,
+  Link2,
+  Globe
 } from 'lucide-react';
 
 export const ArticleDetailPage: React.FC = () => {
@@ -38,13 +40,18 @@ export const ArticleDetailPage: React.FC = () => {
     setSelectedArticleId, 
     setCurrentView, 
     setSelectedCategory,
+    openArticle,
+    goToHome,
+    openCategory,
     bookmarkedIds, 
     toggleBookmark,
     incrementArticleViews,
     comments,
     addComment,
     likeComment,
-    readingFontSize
+    readingFontSize,
+    getArticleUrl,
+    getArticleShareUrl
   } = useNews();
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -68,12 +75,8 @@ export const ArticleDetailPage: React.FC = () => {
   if (!article) return null;
 
   const readTime = calculateReadTime(article.content);
-  const baseUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}${window.location.pathname}`
-    : 'https://the-satkhira-times.netlify.app';
-
-  const articleUrl = `${baseUrl}?article=${article.id}`;
-  const richShareUrl = `${baseUrl}?article=${article.id}&og_t=${encodeURIComponent(article.title)}&og_img=${encodeURIComponent(article.featuredImage)}`;
+  const articleUrl = getArticleUrl(article);
+  const richShareUrl = getArticleShareUrl(article);
 
   const shareLinks = getShareLinks(richShareUrl, article.title, article.featuredImage);
 
@@ -365,9 +368,51 @@ export const ArticleDetailPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Dedicated Direct Post Link Box */}
+        <div className="my-3 p-3 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-sm no-print">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="p-2 rounded bg-red-50 dark:bg-red-950/60 text-[#8B0000] dark:text-red-400 flex-shrink-0">
+              <Link2 className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-bold text-gray-800 dark:text-gray-200 font-bangla">এই সংবাদের সরাসরি লিংক:</span>
+                <span className="text-[10px] bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 font-mono font-bold px-1.5 py-0.5 rounded">
+                  {article.id}
+                </span>
+              </div>
+              <p className="text-[11px] text-gray-500 dark:text-zinc-400 truncate font-mono select-all mt-0.5" title={articleUrl}>
+                {articleUrl}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-shrink-0 self-end sm:self-auto">
+            <button
+              onClick={handleCopyLink}
+              className={`px-3 py-1.5 rounded text-xs font-bold font-bangla transition flex items-center gap-1.5 shadow-sm ${
+                copiedLink 
+                  ? 'bg-emerald-600 text-white' 
+                  : 'bg-black hover:bg-gray-800 text-white'
+              }`}
+            >
+              {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedLink ? 'কপি হয়েছে' : 'লিংক কপি'}</span>
+            </button>
+            <button
+              onClick={() => setIsShareModalOpen(true)}
+              className="px-2.5 py-1.5 bg-[#8B0000] hover:bg-red-800 text-white rounded text-xs font-bold font-bangla transition flex items-center gap-1 shadow-sm"
+              title="সোশ্যাল শেয়ার ও কিউআর কোড"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>শেয়ার</span>
+            </button>
+          </div>
+        </div>
+
         {copiedLink && (
-          <div className="bg-green-100 text-green-800 text-xs text-center py-1.5 rounded mt-2 font-semibold font-bangla">
-            খবরের লিঙ্ক সফলভাবে কপি করা হয়েছে!
+          <div className="bg-green-100 text-green-800 text-xs text-center py-1.5 rounded mt-2 font-semibold font-bangla animate-fadeIn">
+            খবরের সরাসরি লিঙ্ক সফলভাবে কপি করা হয়েছে!
           </div>
         )}
       </header>
@@ -676,10 +721,7 @@ export const ArticleDetailPage: React.FC = () => {
             {relatedArticles.map((rel) => (
               <div
                 key={rel.id}
-                onClick={() => {
-                  setSelectedArticleId(rel.id);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+                onClick={() => openArticle(rel.id)}
                 className="group cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm hover:border-red-500 transition duration-200 flex flex-col justify-between"
               >
                 <div>

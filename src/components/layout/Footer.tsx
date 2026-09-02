@@ -23,9 +23,9 @@ import {
 export const Footer: React.FC = () => {
   const { 
     settings, 
-    setCurrentView, 
-    setSelectedCategory, 
-    setSelectedArticleId 
+    openCategory,
+    openView,
+    goToHome
   } = useNews();
 
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -43,16 +43,12 @@ export const Footer: React.FC = () => {
   };
 
   const handleCategoryClick = (cat: string) => {
-    setSelectedCategory(cat);
-    setSelectedArticleId(null);
-    setCurrentView('category');
+    openCategory(cat);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleUpazilaClick = (upazila: string) => {
-    setSelectedCategory(upazila === 'সকল' ? 'সাতক্ষীরা' : `সাতক্ষীরা:${upazila}`);
-    setSelectedArticleId(null);
-    setCurrentView('category');
+    openCategory(upazila === 'সকল' ? 'সাতক্ষীরা' : `সাতক্ষীরা:${upazila}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -224,35 +220,35 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-zinc-400">
               <li>
-                <button onClick={() => { setCurrentView('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
+                <button onClick={() => { openView('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
                   আমাদের কথা
                 </button>
               </li>
               <li>
-                <button onClick={() => { setCurrentView('contact'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
+                <button onClick={() => { openView('contact'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
                   বিজ্ঞাপন ও যোগাযোগ
                 </button>
               </li>
               <li>
-                <button onClick={() => { setCurrentView('privacy'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
+                <button onClick={() => { openView('privacy'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
                   গোপনীয়তা নীতি
                 </button>
               </li>
               <li>
-                <button onClick={() => { setCurrentView('terms'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
+                <button onClick={() => { openView('terms'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white">
                   ব্যবহারের শর্তাবলী
                 </button>
               </li>
               <li className="pt-2 space-y-2">
                 <button
-                  onClick={() => { setCurrentView('reporter'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  onClick={() => { openView('reporter'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="text-emerald-400 hover:text-white font-bold flex items-center gap-1 font-sans uppercase tracking-wider text-[11px]"
                 >
                   <PenSquare className="w-3.5 h-3.5" />
                   <span>সাংবাদিক পোর্টাল (লগইন)</span>
                 </button>
                 <button
-                  onClick={() => { setCurrentView('admin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  onClick={() => { openView('admin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="text-[#8B0000] hover:text-white font-bold flex items-center gap-1 font-sans uppercase tracking-wider text-[11px]"
                 >
                   <Lock className="w-3.5 h-3.5" />

@@ -3,7 +3,7 @@ import { useNews } from '../../context/NewsContext';
 import { Flame, Play, Pause, ChevronLeft, ChevronRight, Bell } from 'lucide-react';
 
 export const BreakingTicker: React.FC = () => {
-  const { breakingNews, setSelectedArticleId, setCurrentView } = useNews();
+  const { breakingNews, openArticle } = useNews();
   const [isPaused, setIsPaused] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -21,8 +21,7 @@ export const BreakingTicker: React.FC = () => {
 
   const handleItemClick = (articleId?: string) => {
     if (articleId) {
-      setSelectedArticleId(articleId);
-      setCurrentView('article');
+      openArticle(articleId);
     }
   };
 

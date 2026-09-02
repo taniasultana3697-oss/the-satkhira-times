@@ -33,8 +33,10 @@ import {
   Mail,
   MapPin,
   QrCode,
-  Printer
+  Printer,
+  Link2
 } from 'lucide-react';
+import { getArticleUrl } from '../../utils/helpers';
 
 type ReporterTab = 'submit_news' | 'my_news' | 'press_card' | 'settings';
 
@@ -49,9 +51,13 @@ export const ReporterPortal: React.FC = () => {
     articles, 
     addArticle, 
     updateArticle, 
+    openArticle,
     setCurrentView, 
     setSelectedArticleId 
   } = useNews();
+
+  // Link copy state
+  const [copiedArticleId, setCopiedArticleId] = useState<string | null>(null);
 
   // Login form state
   const [loginIdentifier, setLoginIdentifier] = useState('');
@@ -937,7 +943,25 @@ export const ReporterPortal: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-end sm:self-center flex-shrink-0">
+                <div className="flex items-center gap-1.5 self-end sm:self-center flex-shrink-0">
+                  <button
+                    onClick={() => {
+                      const url = getArticleUrl(art);
+                      navigator.clipboard.writeText(url);
+                      setCopiedArticleId(art.id);
+                      setTimeout(() => setCopiedArticleId(null), 2000);
+                    }}
+                    className={`border px-2.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 transition ${
+                      copiedArticleId === art.id
+                        ? 'bg-emerald-600 border-emerald-600 text-white'
+                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-emerald-600 shadow-sm'
+                    }`}
+                    title="পোস্টের সরাসরি লিংক কপি করুন"
+                  >
+                    {copiedArticleId === art.id ? <Check className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
+                    <span>{copiedArticleId === art.id ? 'কপি হয়েছে' : 'লিংক'}</span>
+                  </button>
+
                   <button
                     onClick={() => handleEditExistingArticle(art)}
                     className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-emerald-600 px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 shadow-sm"
@@ -945,11 +969,9 @@ export const ReporterPortal: React.FC = () => {
                     <Edit3 className="w-3.5 h-3.5" />
                     <span>এডিট</span>
                   </button>
+
                   <button
-                    onClick={() => {
-                      setSelectedArticleId(art.id);
-                      setCurrentView('article');
-                    }}
+                    onClick={() => openArticle(art.id)}
                     className="bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />

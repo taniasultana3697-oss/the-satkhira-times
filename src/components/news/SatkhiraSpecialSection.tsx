@@ -5,7 +5,7 @@ import { getRelativeBengaliTime, toBengaliDigits } from '../../utils/helpers';
 import { MapPin, Flame, Clock, Eye, ChevronRight, Trees, Waves, Fish, Shield } from 'lucide-react';
 
 export const SatkhiraSpecialSection: React.FC = () => {
-  const { articles, setSelectedArticleId, setCurrentView, setSelectedCategory } = useNews();
+  const { articles, openArticle, openCategory } = useNews();
   const [activeUpazila, setActiveUpazila] = useState<string>('সকল');
 
   const satkhiraArticles = articles.filter(a => {
@@ -17,13 +17,11 @@ export const SatkhiraSpecialSection: React.FC = () => {
   });
 
   const handleArticleClick = (id: string) => {
-    setSelectedArticleId(id);
-    setCurrentView('article');
+    openArticle(id);
   };
 
   const handleViewAll = () => {
-    setSelectedCategory(activeUpazila === 'সকল' ? 'সাতক্ষীরা' : `সাতক্ষীরা:${activeUpazila}`);
-    setCurrentView('category');
+    openCategory(activeUpazila === 'সকল' ? 'সাতক্ষীরা' : `সাতক্ষীরা:${activeUpazila}`);
   };
 
   return (

@@ -11,9 +11,12 @@ import {
   MapPin, 
   Clock, 
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  Link2,
+  Copy,
+  Check
 } from 'lucide-react';
-import { formatBengaliDate, toBengaliDigits } from '../../utils/helpers';
+import { formatBengaliDate, toBengaliDigits, getArticleUrl } from '../../utils/helpers';
 import { INITIAL_CATEGORIES } from '../../data/initialData';
 
 interface AdminNewsListProps {
@@ -26,13 +29,13 @@ export const AdminNewsList: React.FC<AdminNewsListProps> = ({ onAddNew, onEdit }
     articles, 
     deleteArticle, 
     updateArticle, 
-    setSelectedArticleId, 
-    setCurrentView 
+    openArticle
   } = useNews();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCat, setSelectedCat] = useState('সকল');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   let filtered = [...articles];
 
@@ -52,6 +55,14 @@ export const AdminNewsList: React.FC<AdminNewsListProps> = ({ onAddNew, onEdit }
   const handleDelete = (id: string) => {
     deleteArticle(id);
     setDeleteConfirmId(null);
+  };
+
+  const handleCopyLink = (e: React.MouseEvent, art: typeof articles[0]) => {
+    e.stopPropagation();
+    const url = getArticleUrl(art);
+    navigator.clipboard.writeText(url);
+    setCopiedId(art.id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   return (
@@ -205,14 +216,24 @@ export const AdminNewsList: React.FC<AdminNewsListProps> = ({ onAddNew, onEdit }
                 {/* Actions */}
                 <td className="py-3 px-3 text-right">
                   <div className="flex items-center justify-end gap-1.5">
+                    {/* Copy Direct Link */}
+                    <button
+                      onClick={(e) => handleCopyLink(e, art)}
+                      className={`p-1.5 rounded transition ${
+                        copiedId === art.id 
+                          ? 'bg-emerald-600 text-white' 
+                          : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300'
+                      }`}
+                      title={copiedId === art.id ? 'লিংক কপি হয়েছে!' : 'সরাসরি পোস্ট লিংক কপি করুন'}
+                    >
+                      {copiedId === art.id ? <Check className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
+                    </button>
+
                     {/* Live Preview link */}
                     <button
-                      onClick={() => {
-                        setSelectedArticleId(art.id);
-                        setCurrentView('article');
-                      }}
+                      onClick={() => openArticle(art.id)}
                       className="p-1.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 transition"
-                      title="সংবাদটি দেখুন"
+                      title="সংবাদটি লাইভ পড়ুন"
                     >
                       <Eye className="w-3.5 h-3.5" />
                     </button>

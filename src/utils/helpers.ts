@@ -107,6 +107,108 @@ export const calculateReadTime = (content: string): string => {
   return `${toBengaliDigits(minutes)} মিনিট পাঠ`;
 };
 
+/**
+ * Creates a clean URL slug from a Bengali/English title
+ * e.g. "সাতক্ষীরায় সুন্দরবনের মধু সংগ্রহ শুরু" -> "সাতক্ষীরায়-সুন্দরবনের-মধু-সংগ্রহ-শুরু"
+ */
+export const createArticleSlug = (title: string): string => {
+  if (!title) return 'news';
+  return title
+    .trim()
+    .replace(/[^\p{L}\p{N}\s-]/gu, '') // Keep Unicode letters (Bengali, English etc.), numbers, spaces, hyphens
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .substring(0, 120);
+};
+
+/**
+ * Generates the unique, direct permalink for an individual article
+ */
+export const getArticleUrl = (article: { id: string; title?: string } | string): string => {
+  const id = typeof article === 'string' ? article : article.id;
+  const title = typeof article === 'string' ? '' : article.title || '';
+  const slug = title ? createArticleSlug(title) : '';
+  
+  if (typeof window === 'undefined') {
+    return `https://the-satkhira-times.netlify.app/?article=${id}${slug ? `&slug=${encodeURIComponent(slug)}` : ''}`;
+  }
+  
+  const baseUrl = `${window.location.origin}${window.location.pathname}`;
+  return `${baseUrl}?article=${id}${slug ? `&slug=${encodeURIComponent(slug)}` : ''}`;
+};
+
+/**
+ * Generates rich share URL with OpenGraph title & image params for crawlers
+ */
+export const getArticleShareUrl = (article: { id: string; title: string; featuredImage?: string }): string => {
+  if (typeof window === 'undefined') {
+    return `https://the-satkhira-times.netlify.app/?article=${article.id}`;
+  }
+  const baseUrl = `${window.location.origin}${window.location.pathname}`;
+  const slug = createArticleSlug(article.title);
+  const params = new URLSearchParams();
+  params.set('article', article.id);
+  if (slug) params.set('slug', slug);
+  if (article.title) params.set('og_t', article.title);
+  if (article.featuredImage) params.set('og_img', article.featuredImage);
+
+  return `${baseUrl}?${params.toString()}`;
+};
+
+/**
+ * Parses article ID, view, and category from current browser URL / Search / Hash / Path
+ */
+export const parseRouteFromUrl = (): {
+  articleId: string | null;
+  view: string | null;
+  category: string | null;
+  search: string | null;
+} => {
+  if (typeof window === 'undefined') {
+    return { articleId: null, view: null, category: null, search: null };
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const pathname = window.location.pathname;
+  const hash = window.location.hash;
+
+  // 1. Check Query Params (?article=art-1 or ?news=art-1 or ?id=art-1)
+  let articleId = urlParams.get('article') || urlParams.get('news') || urlParams.get('id');
+
+  // 2. Check Pathname (/news/art-1 or /article/art-1)
+  if (!articleId) {
+    const pathMatch = pathname.match(/^\/(?:news|article)\/([^/?#]+)/);
+    if (pathMatch && pathMatch[1]) {
+      articleId = pathMatch[1];
+    }
+  }
+
+  // 3. Check Hash (#news/art-1 or #article-art-1 or #/article/art-1)
+  if (!articleId && hash) {
+    const hashMatch = hash.match(/#(?:news\/|article\/|article-|)(art-[0-9a-zA-Z_-]+)/);
+    if (hashMatch && hashMatch[1]) {
+      articleId = hashMatch[1];
+    }
+  }
+
+  // 4. Check View
+  const view = urlParams.get('view') || 
+    (pathname.includes('/admin') ? 'admin' : 
+     pathname.includes('/reporter') ? 'reporter' : 
+     pathname.includes('/bookmarks') ? 'bookmarks' : null);
+
+  // 5. Check Category
+  let category = urlParams.get('category') || urlParams.get('cat');
+  if (!category && pathname.startsWith('/category/')) {
+    category = decodeURIComponent(pathname.replace('/category/', ''));
+  }
+
+  // 6. Check Search
+  const search = urlParams.get('q') || urlParams.get('search');
+
+  return { articleId, view, category, search };
+};
+
 // Social Share Link Builders
 export const getShareLinks = (url: string, title: string, imageUrl?: string) => {
   const encodedUrl = encodeURIComponent(url);

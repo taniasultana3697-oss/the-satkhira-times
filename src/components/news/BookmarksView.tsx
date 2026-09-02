@@ -8,15 +8,14 @@ export const BookmarksView: React.FC = () => {
     articles, 
     bookmarkedIds, 
     toggleBookmark, 
-    setSelectedArticleId, 
-    setCurrentView 
+    openArticle,
+    goToHome
   } = useNews();
 
   const savedArticles = articles.filter(a => bookmarkedIds.includes(a.id));
 
   const handleArticleClick = (id: string) => {
-    setSelectedArticleId(id);
-    setCurrentView('article');
+    openArticle(id);
   };
 
   return (
@@ -37,7 +36,7 @@ export const BookmarksView: React.FC = () => {
         </div>
 
         <button
-          onClick={() => setCurrentView('home')}
+          onClick={goToHome}
           className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-lg transition"
         >
           প্রচ্ছদে ফিরুন
@@ -54,7 +53,7 @@ export const BookmarksView: React.FC = () => {
             যেকোনো সংবাদের বুকমার্ক আইকনে ক্লিক করে পরবর্তীতে পড়ার জন্য সংরক্ষণ করুন।
           </p>
           <button
-            onClick={() => setCurrentView('home')}
+            onClick={goToHome}
             className="mt-4 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-5 py-2 rounded-lg transition"
           >
             সংবাদ পড়ুন

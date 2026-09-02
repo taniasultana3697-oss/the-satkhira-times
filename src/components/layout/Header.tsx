@@ -40,7 +40,10 @@ export const Header: React.FC = () => {
     readingFontSize,
     setReadingFontSize,
     currentView,
-    currentReporter
+    currentReporter,
+    openCategory,
+    openView,
+    goToHome
   } = useNews();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -55,25 +58,21 @@ export const Header: React.FC = () => {
     e.preventDefault();
     if (localSearchInput.trim()) {
       setSearchQuery(localSearchInput.trim());
-      setCurrentView('search');
+      openView('search');
       setSearchOpen(false);
       setMobileMenuOpen(false);
     }
   };
 
   const handleCategoryClick = (cat: string) => {
-    setSelectedCategory(cat);
-    setSelectedArticleId(null);
-    setCurrentView('category');
+    openCategory(cat);
     setMobileMenuOpen(false);
     setSatkhiraDropdownOpen(false);
     setMegaMenuOpen(false);
   };
 
   const handleUpazilaClick = (upazila: string) => {
-    setSelectedCategory(upazila === 'সকল' ? 'সাতক্ষীরা' : `সাতক্ষীরা:${upazila}`);
-    setSelectedArticleId(null);
-    setCurrentView('category');
+    openCategory(upazila === 'সকল' ? 'সাতক্ষীরা' : `সাতক্ষীরা:${upazila}`);
     setSatkhiraDropdownOpen(false);
     setMobileMenuOpen(false);
   };
@@ -126,10 +125,7 @@ export const Header: React.FC = () => {
 
             {/* Bookmarks */}
             <button
-              onClick={() => {
-                setCurrentView('bookmarks');
-                setSelectedArticleId(null);
-              }}
+              onClick={() => openView('bookmarks')}
               className="flex items-center gap-1 hover:text-red-400 transition text-zinc-300"
               title="সংরক্ষিত খবর"
             >
@@ -181,10 +177,7 @@ export const Header: React.FC = () => {
 
             {/* Reporter Portal Button */}
             <button
-              onClick={() => {
-                setCurrentView('reporter');
-                setSelectedArticleId(null);
-              }}
+              onClick={() => openView('reporter')}
               className={`flex items-center gap-1 font-sans font-bold text-[11px] px-2.5 py-0.5 rounded transition shadow-sm tracking-wider ${
                 currentReporter 
                   ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
@@ -198,10 +191,7 @@ export const Header: React.FC = () => {
 
             {/* Admin Panel Button */}
             <button
-              onClick={() => {
-                setCurrentView('admin');
-                setSelectedArticleId(null);
-              }}
+              onClick={() => openView('admin')}
               className="flex items-center gap-1 bg-[#8B0000] hover:bg-red-800 text-white font-sans uppercase font-bold text-[11px] px-2.5 py-0.5 rounded transition shadow-sm tracking-wider"
               title="প্রধান অ্যাডমিন প্যানেল"
             >
@@ -218,11 +208,7 @@ export const Header: React.FC = () => {
           
           {/* Left / Center: Logo & Slogan */}
           <div 
-            onClick={() => {
-              setCurrentView('home');
-              setSelectedArticleId(null);
-              setSelectedCategory(null);
-            }}
+            onClick={goToHome}
             className="cursor-pointer text-center md:text-left group flex flex-col md:flex-row items-center gap-4"
           >
             {/* Emblem Seal */}
@@ -288,11 +274,7 @@ export const Header: React.FC = () => {
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-1 lg:gap-4 overflow-x-auto py-2">
               <button
-                onClick={() => {
-                  setCurrentView('home');
-                  setSelectedArticleId(null);
-                  setSelectedCategory(null);
-                }}
+                onClick={goToHome}
                 className={`px-3 py-1 text-sm font-bold tracking-wide transition ${
                   currentView === 'home' 
                     ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' 
@@ -601,7 +583,7 @@ export const Header: React.FC = () => {
             <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-zinc-800 text-xs">
               <button
                 onClick={() => {
-                  setCurrentView('bookmarks');
+                  openView('bookmarks');
                   setMobileMenuOpen(false);
                 }}
                 className="flex items-center gap-1 text-gray-700 dark:text-gray-300 hover:text-[#8B0000]"
@@ -613,7 +595,7 @@ export const Header: React.FC = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => {
-                    setCurrentView('reporter');
+                    openView('reporter');
                     setMobileMenuOpen(false);
                   }}
                   className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold font-sans"
@@ -624,7 +606,7 @@ export const Header: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    setCurrentView('admin');
+                    openView('admin');
                     setMobileMenuOpen(false);
                   }}
                   className="flex items-center gap-1 text-[#8B0000] font-bold font-sans uppercase"

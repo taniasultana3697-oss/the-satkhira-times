@@ -20,8 +20,8 @@ export const CategoryArchiveView: React.FC = () => {
     articles, 
     selectedCategory, 
     setSelectedCategory, 
-    setSelectedArticleId, 
-    setCurrentView, 
+    openArticle,
+    goToHome,
     searchQuery,
     setSearchQuery 
   } = useNews();
@@ -87,8 +87,7 @@ export const CategoryArchiveView: React.FC = () => {
   }
 
   const handleArticleClick = (id: string) => {
-    setSelectedArticleId(id);
-    setCurrentView('article');
+    openArticle(id);
   };
 
   return (
@@ -203,9 +202,8 @@ export const CategoryArchiveView: React.FC = () => {
           </p>
           <button
             onClick={() => {
-              setSelectedCategory(null);
               setSearchQuery('');
-              setCurrentView('home');
+              goToHome();
             }}
             className="mt-4 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-5 py-2 rounded-lg transition"
           >
