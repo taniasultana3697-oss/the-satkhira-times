@@ -39,11 +39,14 @@ export const SocialShareModal: React.FC<SocialShareModalProps> = ({
 
   if (!isOpen) return null;
 
-  const articleUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}${window.location.pathname}?article=${article.id}`
-    : `https://satkhiratimes.com/?article=${article.id}`;
+  const baseUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}${window.location.pathname}`
+    : 'https://the-satkhira-times.netlify.app';
 
-  const shareLinks = getShareLinks(articleUrl, article.title, article.featuredImage);
+  const articleUrl = `${baseUrl}?article=${article.id}`;
+  const richShareUrl = `${baseUrl}?article=${article.id}&og_t=${encodeURIComponent(article.title)}&og_img=${encodeURIComponent(article.featuredImage)}`;
+
+  const shareLinks = getShareLinks(richShareUrl, article.title, article.featuredImage);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(articleUrl);
@@ -59,7 +62,7 @@ export const SocialShareModal: React.FC<SocialShareModalProps> = ({
   };
 
   const handleFacebookShare = () => {
-    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`;
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(richShareUrl)}`;
     window.open(fbUrl, '_blank', 'width=650,height=550,top=100,left=100,toolbar=no,status=no,resizable=yes');
   };
 
@@ -69,7 +72,7 @@ export const SocialShareModal: React.FC<SocialShareModalProps> = ({
         await navigator.share({
           title: article.title,
           text: `${article.title}\n\n${article.excerpt}`,
-          url: articleUrl,
+          url: richShareUrl,
         });
       } catch (err) {
         // Ignored if cancelled
