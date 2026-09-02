@@ -44,6 +44,7 @@ export function prerenderArticles() {
     <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
     <meta property="og:site_name" content="${escapeHtml(INITIAL_SETTINGS.siteName)}" />
     <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://the-satkhira-times.netlify.app/news/${article.id}" />
     <meta property="og:title" content="${rawTitle}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${imageUrl}" />
@@ -55,6 +56,7 @@ export function prerenderArticles() {
     <meta property="article:published_time" content="${article.publishedAt}" />
     <meta property="article:author" content="${authorName}" />
     <meta property="article:section" content="${category}" />
+    <link rel="canonical" href="https://the-satkhira-times.netlify.app/news/${article.id}" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
