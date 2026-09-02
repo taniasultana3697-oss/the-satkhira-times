@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNews } from '../../context/NewsContext';
 import { AdsterraEmbed } from './AdsterraEmbed';
+import { GoogleAdSenseUnit } from './GoogleAdSenseUnit';
 import { X, ExternalLink, ShieldCheck, Zap } from 'lucide-react';
 
 interface AdBannerProps {
@@ -21,13 +22,28 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot, className = '' }) => {
     return null;
   }
 
-  // 1. Sticky footer banner (728x90 Adsterra)
+  const isAdSense = ad.bannerType === 'adsense' || 
+    (ad.codeSnippet && (ad.codeSnippet.includes('adsbygoogle') || ad.codeSnippet.includes('ca-pub-7007492474198710') || ad.codeSnippet.includes('googlesyndication')));
+
+  const clientId = ad.adSenseClientId || 'ca-pub-7007492474198710';
+  const slotId = ad.adSenseSlotId;
+
+  // 1. Sticky footer banner (728x90 or AdSense horizontal)
   if (slot === 'footer_banner') {
     return (
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 border-t border-slate-300 dark:border-slate-700 shadow-2xl backdrop-blur-md transition-all">
         <div className="max-w-5xl mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex-1 flex justify-center items-center overflow-hidden w-full">
-            {ad.bannerType === 'image' && ad.bannerImageUrl ? (
+            {isAdSense ? (
+              <div className="w-full flex justify-center">
+                <GoogleAdSenseUnit
+                  client={clientId}
+                  slot={slotId}
+                  format="horizontal"
+                  style={{ minHeight: '60px', maxHeight: '90px' }}
+                />
+              </div>
+            ) : ad.bannerType === 'image' && ad.bannerImageUrl ? (
               <a 
                 href={ad.targetUrl || 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2'} 
                 target="_blank" 
@@ -65,16 +81,25 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot, className = '' }) => {
     );
   }
 
-  // 2. In-Article or Homepage Native Banner (নেটিভ ব্যানার)
+  // 2. In-Article or Homepage Native Banner (নেটিভ ব্যানার / In-Article Ads)
   if (slot === 'in_article' || slot === 'native_banner') {
     return (
       <div className={`my-6 p-2 sm:p-3 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl text-center shadow-sm ${className}`}>
         <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 flex items-center justify-center gap-1.5 font-sans">
           <ShieldCheck className="w-3.5 h-3.5 text-[#8B0000]" />
-          <span>স্পন্সরড বার্তা ও নেটিভ বিজ্ঞাপন (Native Banner)</span>
+          <span>স্পন্সরড বার্তা ও বিজ্ঞাপন</span>
         </div>
         
-        {ad.bannerType === 'image' && ad.bannerImageUrl ? (
+        {isAdSense ? (
+          <div className="w-full">
+            <GoogleAdSenseUnit 
+              client={clientId}
+              slot={slotId}
+              layout="in-article"
+              format="fluid"
+            />
+          </div>
+        ) : ad.bannerType === 'image' && ad.bannerImageUrl ? (
           <a 
             href={ad.targetUrl || 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2'} 
             target="_blank" 
@@ -108,9 +133,18 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot, className = '' }) => {
     return (
       <div className={`ad-container text-center my-4 ${className}`}>
         <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
-          বিজ্ঞাপন (300x250)
+          বিজ্ঞাপন (Sidebar)
         </div>
-        {ad.bannerType === 'image' && ad.bannerImageUrl ? (
+        {isAdSense ? (
+          <div className="w-full flex justify-center">
+            <GoogleAdSenseUnit
+              client={clientId}
+              slot={slotId}
+              format="rectangle"
+              style={{ width: '300px', height: '250px' }}
+            />
+          </div>
+        ) : ad.bannerType === 'image' && ad.bannerImageUrl ? (
           <a 
             href={ad.targetUrl || 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2'} 
             target="_blank" 
@@ -142,9 +176,18 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot, className = '' }) => {
     return (
       <div className={`ad-container text-center my-3 max-w-7xl mx-auto px-4 ${className}`}>
         <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
-          বিজ্ঞাপন (728x90)
+          বিজ্ঞাপন (Header)
         </div>
-        {ad.bannerType === 'image' && ad.bannerImageUrl ? (
+        {isAdSense ? (
+          <div className="w-full flex justify-center">
+            <GoogleAdSenseUnit
+              client={clientId}
+              slot={slotId}
+              format="horizontal"
+              style={{ minHeight: '90px' }}
+            />
+          </div>
+        ) : ad.bannerType === 'image' && ad.bannerImageUrl ? (
           <a 
             href={ad.targetUrl || 'https://www.profitableratecpmnetwork.com/nvag1ssim?key=e38ebb997da56e359a48ee9f605736e2'} 
             target="_blank" 
@@ -198,7 +241,15 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot, className = '' }) => {
     );
   }
 
-  // 6. Fallback Custom Snippet
+  // 6. Fallback Custom Snippet or Google AdSense
+  if (isAdSense) {
+    return (
+      <div className={`ad-container text-center ${className}`}>
+        <GoogleAdSenseUnit client={clientId} slot={slotId} format="auto" />
+      </div>
+    );
+  }
+
   return (
     <div className={`ad-container text-center ${className}`}>
       <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">বিজ্ঞাপন</div>

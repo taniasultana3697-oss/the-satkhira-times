@@ -72,10 +72,12 @@ export interface AdConfiguration {
   name: string;
   enabled: boolean;
   codeSnippet: string;
-  bannerType: 'image' | 'script' | 'direct_link';
+  bannerType: 'image' | 'script' | 'direct_link' | 'adsense';
   bannerImageUrl?: string;
   targetUrl?: string;
   dimensions?: string;
+  adSenseClientId?: string;
+  adSenseSlotId?: string;
   note?: string;
 }
 
